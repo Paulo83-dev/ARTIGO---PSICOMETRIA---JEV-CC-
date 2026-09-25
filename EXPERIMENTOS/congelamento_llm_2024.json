@@ -1,0 +1,71 @@
+{
+ "descricao": "Parâmetros do LLM de comparação ajustados só no ENEM 2025, a aplicar uma única vez ao ENEM 2024. Ver comparacao_llm_especificacao.md.",
+ "data_congelamento": "2026-09-25",
+ "ano_desenvolvimento": 2025,
+ "ano_teste": 2024,
+ "modelo": "z-ai/glm-5.3-flash",
+ "provedor": "Together",
+ "requisicoes": "python EXPERIMENTOS/scripts/rodar_llm.py --ano 2024 --saida EXPERIMENTOS/resultados/llm_glm_2024.jsonl",
+ "metodos_llm": {
+  "LLM A (letras)": {
+   "tipo": "letras",
+   "temperatura": 9.934427784709275
+  },
+  "LLM B q1b": {
+   "tipo": "softmax",
+   "variavel": "q1b",
+   "beta": 0.49916976749811764
+  },
+  "LLM B pares": {
+   "tipo": "softmax",
+   "variavel": "pares",
+   "beta": 0.37429719708873055
+  },
+  "LLM B q1b+pares": {
+   "tipo": "logit",
+   "media": [
+    1.930311778194104,
+    5.843279076974508e-18
+   ],
+   "dp": [
+    0.9215301685948663,
+    1.2556866673211626
+   ],
+   "beta_padronizado": [
+    0.18791514589628935,
+    0.3099815913140602
+   ]
+  }
+ },
+ "comparacoes": [
+  {
+   "id": "C1",
+   "a": "q1b+pares (principal)",
+   "b": "LLM A (letras)",
+   "descricao": "Jev q1b + pares × LLM, método A (letras)"
+  },
+  {
+   "id": "C2",
+   "a": "q1b+pares (principal)",
+   "b": "LLM B q1b+pares",
+   "descricao": "Jev q1b + pares × LLM, método B (q1b + pares)"
+  },
+  {
+   "id": "C3",
+   "a": "q1b",
+   "b": "LLM B q1b",
+   "descricao": "Jev q1b × LLM q1b (método B)"
+  },
+  {
+   "id": "C4",
+   "a": "LLM A (letras)",
+   "b": "oracle (usa gabarito)",
+   "descricao": "LLM método A × Oracle"
+  }
+ ],
+ "bootstrap": {
+  "reamostragens": 5000,
+  "semente": 2024,
+  "unidade": "grupo de itens (itens que compartilham texto de apoio são sorteados juntos)"
+ }
+}

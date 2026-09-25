@@ -1,0 +1,171 @@
+{
+ "ano": 2025,
+ "n_itens": 114,
+ "resultados_fora_da_dobra": {
+  "LLM A (letras)": {
+   "brier": 0.046521415980452105,
+   "mae": 0.0746087893164576,
+   "spearman_intraitem": 0.4929824561403508,
+   "jensen_shannon": 0.03872313155037866,
+   "brier_distratores": 0.047114737668635054,
+   "spearman_distratores": 0.21929824561403513,
+   "acerto_principal_distrator": 0.3333333333333333,
+   "auc_nao_funcional": 0.6832426832426832,
+   "brier_por_area": {
+    "CH": 0.03567566546138011,
+    "CN": 0.06385199816354938,
+    "LC": 0.04454229357353232,
+    "MT": 0.056397887554900064
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.3,
+    "CN": 0.42105263157894735,
+    "LC": 0.3783783783783784,
+    "MT": 0.2222222222222222
+   }
+  },
+  "LLM B q1b": {
+   "brier": 0.048263949385922246,
+   "mae": 0.07541732198881855,
+   "spearman_intraitem": 0.5456140350877192,
+   "jensen_shannon": 0.04002286956173304,
+   "brier_distratores": 0.04931940192228169,
+   "spearman_distratores": 0.319298245614035,
+   "acerto_principal_distrator": 0.4166666666666667,
+   "auc_nao_funcional": 0.7213157213157213,
+   "brier_por_area": {
+    "CH": 0.03161218998272277,
+    "CN": 0.08131632657935894,
+    "LC": 0.049625276812327465,
+    "MT": 0.04758095464568271
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.5,
+    "CN": 0.42105263157894735,
+    "LC": 0.3918918918918919,
+    "MT": 0.2777777777777778
+   }
+  },
+  "LLM B pares": {
+   "brier": 0.04344820672356534,
+   "mae": 0.06932068387485735,
+   "spearman_intraitem": 0.6114035087719296,
+   "jensen_shannon": 0.03576622023071153,
+   "brier_distratores": 0.0471140359185173,
+   "spearman_distratores": 0.4298245614035088,
+   "acerto_principal_distrator": 0.5087719298245614,
+   "auc_nao_funcional": 0.7683674350341017,
+   "brier_por_area": {
+    "CH": 0.0266556380271425,
+    "CN": 0.08124228868644705,
+    "LC": 0.03745201129934504,
+    "MT": 0.05319678568236044
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.475,
+    "CN": 0.5263157894736842,
+    "LC": 0.5675675675675675,
+    "MT": 0.4444444444444444
+   }
+  },
+  "LLM B q1b+pares": {
+   "brier": 0.04065239858112887,
+   "mae": 0.06772634583445551,
+   "spearman_intraitem": 0.5982456140350876,
+   "jensen_shannon": 0.03400508720692954,
+   "brier_distratores": 0.044996516280706424,
+   "spearman_distratores": 0.41403508771929826,
+   "acerto_principal_distrator": 0.4824561403508772,
+   "auc_nao_funcional": 0.7792454459121125,
+   "brier_por_area": {
+    "CH": 0.028033571652342104,
+    "CN": 0.07820116446603893,
+    "LC": 0.03638370760087119,
+    "MT": 0.037833959226001794
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.45,
+    "CN": 0.5263157894736842,
+    "LC": 0.5675675675675675,
+    "MT": 0.3333333333333333
+   }
+  },
+  "Jev q1b": {
+   "brier": 0.04043841422584548,
+   "mae": 0.06725173371025238,
+   "spearman_intraitem": 0.5775861489922002,
+   "jensen_shannon": 0.03339130082642789,
+   "brier_distratores": 0.04190185990258467,
+   "spearman_distratores": 0.34544858622880875,
+   "acerto_principal_distrator": 0.4166666666666667,
+   "auc_nao_funcional": 0.8301821635154969,
+   "brier_por_area": {
+    "CH": 0.03622327096656784,
+    "CN": 0.048330531853630634,
+    "LC": 0.03847623358377121,
+    "MT": 0.04550820195917524
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.45,
+    "CN": 0.2631578947368421,
+    "LC": 0.5,
+    "MT": 0.3333333333333333
+   }
+  },
+  "Jev q1b+pares": {
+   "brier": 0.03913574666061739,
+   "mae": 0.06602376659599972,
+   "spearman_intraitem": 0.5964912280701752,
+   "jensen_shannon": 0.03220398265022586,
+   "brier_distratores": 0.04043528939977468,
+   "spearman_distratores": 0.38245614035087716,
+   "acerto_principal_distrator": 0.4473684210526316,
+   "auc_nao_funcional": 0.8366571699905033,
+   "brier_por_area": {
+    "CH": 0.03450429294787001,
+    "CN": 0.048427473823360496,
+    "LC": 0.03698171777299329,
+    "MT": 0.04404765784172123
+   },
+   "acerto_principal_distrator_por_area": {
+    "CH": 0.475,
+    "CN": 0.3157894736842105,
+    "LC": 0.5405405405405406,
+    "MT": 0.3333333333333333
+   }
+  }
+ },
+ "diagnosticos_pares_llm": {
+  "consistencia_entre_ordens": 0.8393501805054152,
+  "proporcao_escolhe_a_primeira": 0.45526315789473687,
+  "acuracia_por_par": {
+   "so_distratores": {
+    "acuracia": 0.6794117647058824,
+    "n_pares": 680
+   },
+   "com_correta": {
+    "acuracia": 0.8725274725274725,
+    "n_pares": 455
+   },
+   "so_distratores_dif>10pp": {
+    "acuracia": 0.7688888888888888,
+    "n_pares": 225
+   },
+   "com_correta_dif>10pp": {
+    "acuracia": 0.9508670520231214,
+    "n_pares": 346
+   }
+  }
+ },
+ "uso_llm": {
+  "custo_usd": 0.2757108600000018,
+  "tokens_entrada": 1583042,
+  "chamadas": 3420,
+  "com_raciocinio": 705,
+  "segundos_mediana_por_chamada": 0.9
+ },
+ "uso_jev": {
+  "tokens_entrada": 1793122,
+  "custo_usd": 0.07531112400000001
+ }
+}

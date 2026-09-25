@@ -75,5 +75,12 @@ Requisitos: Python 3.11 ou superior e o pacote `httpx`.
    python EXPERIMENTOS/scripts/analisar_rodada3.py --ano 2025 --respostas1 EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --respostas3 EXPERIMENTOS/resultados/jev_rodada3_2025.jsonl --saida EXPERIMENTOS/resultados/analise_rodada3_2025
    ```
 6. Teste em 2024: os comandos estão na seção 6 de `EXPERIMENTOS/congelamento_teste_2024.md`.
+7. Comparação com um LLM generativo (`z-ai/glm-5.3-flash` via OpenRouter; requer `OPENROUTER_API_KEY` no `.env`). Especificação em `EXPERIMENTOS/comparacao_llm_especificacao.md`:
+   ```
+   python EXPERIMENTOS/scripts/rodar_llm.py --ano 2025 --saida EXPERIMENTOS/resultados/llm_glm_2025.jsonl
+   python EXPERIMENTOS/scripts/analisar_llm.py desenvolvimento --ano 2025 --llm EXPERIMENTOS/resultados/llm_glm_2025.jsonl --jev1 EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --jev3 EXPERIMENTOS/resultados/jev_rodada3_2025.jsonl --saida EXPERIMENTOS/resultados/analise_llm_2025 --congelamento EXPERIMENTOS/congelamento_llm_2024.json
+   python EXPERIMENTOS/scripts/rodar_llm.py --ano 2024 --saida EXPERIMENTOS/resultados/llm_glm_2024.jsonl
+   python EXPERIMENTOS/scripts/analisar_llm.py teste --congelamento EXPERIMENTOS/congelamento_llm_2024.json --llm EXPERIMENTOS/resultados/llm_glm_2024.jsonl --teste-jev EXPERIMENTOS/resultados/teste_2024.json --saida EXPERIMENTOS/resultados/comparacao_llm_2024
+   ```
 
 Cada linha do arquivo de saída das chamadas guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.
