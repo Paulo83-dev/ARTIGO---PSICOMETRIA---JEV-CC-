@@ -1,0 +1,28 @@
+# --- Credenciais (nunca versionar) ---
+.env
+.env.*
+
+# --- Dados grandes ou de terceiros ---
+# Microdados do INEP (~4,6 GB): baixar do portal do INEP; o acervo exportado já traz as contagens agregadas.
+microdados_enem_2024/
+microdados_enem_2025/
+# PDFs de artigos científicos (direitos autorais das editoras)
+REFERENCIAIS TEÓRICOS/
+# Cadernos oficiais: públicos no portal do INEP; referenciados, não redistribuídos
+Provas Originais - PDF/
+
+# --- Material de trabalho interno ---
+FICHAMENTO/
+EXPERIMENTOS/rascunhos/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- Sistema ---
+Thumbs.db
+desktop.ini
+.DS_Store

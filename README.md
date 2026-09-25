@@ -1,0 +1,62 @@
+# Atratividade de distratores do ENEM com o modelo Jev
+
+Este repositório reúne os dados e o código de uma pesquisa em psicometria que investiga se o **Jev** (TypeSafe AI), um modelo de linguagem que devolve decisões estruturadas com probabilidades em vez de texto, consegue antecipar **como os participantes do ENEM distribuem suas escolhas entre as alternativas A–E** de uma questão, incluindo a atratividade de cada distrator.
+
+As previsões do Jev são comparadas com as proporções reais de escolha calculadas a partir dos microdados oficiais do Inep.
+
+## Estrutura
+
+```
+exportacao_acervo/
+  acervo_questoes_aprovadas_enem_2024_2025.json   acervo de questões (entrada do experimento)
+VIZUALIZAÇÂO HTML/
+  REVISAO_INTEGRAL_ACERVO_2024.html                revisão da curadoria, questão a questão
+  REVISAO_INTEGRAL_ACERVO_2025.html
+EXPERIMENTOS/
+  rodada1_especificacao.md                         perguntas feitas ao Jev e desenho da rodada
+  scripts/                                         código para montar as perguntas e chamar a API
+  resultados/                                      respostas brutas do Jev e resultados das análises
+```
+
+## Dados
+
+**Acervo.** Questões dos cadernos azuis do ENEM 2024 e 2025 que são **textualmente autossuficientes**: foram excluídas as que dependem de imagem, gráfico, diagrama ou quadro, no enunciado ou nas alternativas, e as anuladas. A elegibilidade foi definida sem usar gabarito, parâmetros TRI, frequências observadas ou desempenho de modelos.
+
+Para cada questão, o acervo traz:
+- `entrada`: área, texto de apoio, texto principal e alternativas A–E. **É o único conteúdo enviado ao modelo.**
+- `gabarito` e `parametros_tri_oficiais` (a, b, c) da tabela oficial de itens;
+- `respostas_observadas`: contagens e proporções A–E entre as marcações válidas dos participantes presentes nas provas regulares impressas.
+
+O dicionário completo dos campos está dentro do próprio arquivo JSON (`dicionario_de_campos`).
+
+**O que não está no repositório.** Os microdados do ENEM e os cadernos de prova em PDF são públicos e podem ser obtidos no portal do Inep; não são redistribuídos aqui. O acervo já contém as contagens agregadas necessárias para as análises, sem nenhuma resposta individual.
+
+### Como citar os dados
+
+Os microdados devem ser citados conforme a orientação do Inep (seção 5 do Leia-me de cada edição):
+
+- INSTITUTO NACIONAL DE ESTUDOS E PESQUISAS EDUCACIONAIS ANÍSIO TEIXEIRA. **Microdados do Enem 2024**. Brasília: Inep, 2025. Disponível em: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem. Acesso em: 25 set. 2026.
+- INSTITUTO NACIONAL DE ESTUDOS E PESQUISAS EDUCACIONAIS ANÍSIO TEIXEIRA. **Microdados do Enem 2025**. Brasília: Inep, 2026. Disponível em: https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem. Acesso em: 25 set. 2026.
+
+## Desenho experimental
+
+- **Desenvolvimento: ENEM 2025.** Todas as escolhas (perguntas, temperatura, combinação) são feitas apenas com estes itens, usando validação cruzada.
+- **Teste: ENEM 2024.** A configuração escolhida é congelada e registrada antes de ser aplicada, uma única vez, aos itens de 2024.
+- **Modelo:** versão fixa `jev-1.13.0`.
+
+Os detalhes de cada rodada estão no arquivo de especificação correspondente em `EXPERIMENTOS/`.
+
+## Como reproduzir
+
+Requisitos: Python 3.11 ou superior e o pacote `httpx`.
+
+1. Crie um arquivo `.env` na raiz com a sua chave da TypeSafe:
+   ```
+   TYPESAFE_API_KEY=sua_chave
+   ```
+2. Envie as perguntas ao Jev (um item por requisição; itens já respondidos são pulados):
+   ```
+   python EXPERIMENTOS/scripts/rodar_jev.py --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl
+   ```
+
+Cada linha do arquivo de saída guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.
