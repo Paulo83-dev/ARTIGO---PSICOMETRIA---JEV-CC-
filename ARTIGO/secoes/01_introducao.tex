@@ -1,11 +1,25 @@
 % 01_introducao: ver ROTEIRO.md
-% STATUS: a escrever
+% STATUS: primeira versão para revisão
 
 \section{Introdução}\label{sec:introducao}
 
-% TODO: Itens de múltipla escolha, distratores e pré-teste
-% TODO: Previsão a partir do texto: da dificuldade à distribuição de escolhas
-% TODO: LLMs acertam a resposta, mas não reproduzem a atratividade dos distratores
-% TODO: Lacunas
-% TODO: Proposta
-% TODO: Contribuições
+O Exame Nacional do Ensino Médio (ENEM) é aplicado anualmente a milhões de participantes e exige a criação contínua de itens de boa qualidade. No processo descrito pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep), os itens são elaborados por colaboradores credenciados de acordo com a matriz de referência, passam por validação pedagógica e são \emph{pré-testados} numa amostra de estudantes semelhante à população do exame; a partir das respostas, os itens com desempenho adequado são incorporados ao Banco Nacional de Itens (BNI), e os demais são reformulados ou descartados \citep{inep2021guia}. O pré-teste é, segundo o próprio Inep, ``a forma empírica de se avaliar a qualidade técnico-pedagógica e psicométrica dos itens'' \citep[p.~9]{inep2021procedimentos}.
+
+Entre as análises feitas após o pré-teste, a Teoria Clássica dos Testes calcula, para cada item, o percentual de escolha de cada alternativa e o coeficiente bisserial de cada uma. O Inep destaca que esses percentuais ``são muito importantes para a análise pedagógica do item, pois permitem saber quais foram as alternativas erradas mais escolhidas pelos alunos'' \citep[p.~11]{inep2021procedimentos}. As alternativas erradas, os \emph{distratores}, são decisivas para a qualidade de um item de múltipla escolha: um distrator que quase ninguém escolhe não mede nada, e um distrator mais escolhido que a alternativa correta pode indicar um problema de redação ou de gabarito \citep{haladyna1993,tarrant2009,benedetto2025}. Hoje, esse conhecimento só é obtido depois que o item é aplicado a estudantes, com custo, tempo e risco de exposição: em 2011, por exemplo, questões usadas em pré-teste vieram a público antes da aplicação do exame \citep{marinho2023}.
+
+Este trabalho investiga se é possível antecipar essa informação a partir apenas do texto do item: prever, antes de qualquer resposta, a proporção de participantes que escolherá cada uma das cinco alternativas. A tarefa, chamada de \textit{candidate distribution matching} por \citet{liusie2023}, é mais exigente que prever a dificuldade do item \citep{marinho2023,xue2020}, porque exige distinguir os distratores entre si. Modelos de linguagem parecem candidatos naturais, mas os resultados até aqui são desanimadores. \citet{saeuberli2025} mostraram que dezoito LLMs, usados da forma habitual, pelas probabilidades atribuídas às letras das alternativas, concentram quase toda a probabilidade na alternativa correta e quase nunca superam uma linha de base simples que conhece o gabarito e divide o restante igualmente entre os distratores; os modelos acertam a resposta, mas não reproduzem a atratividade dos distratores. Revisões recentes apontam ainda que as métricas usadas para avaliar distratores raramente são validadas contra escolhas reais de estudantes, por falta de dados \citep{benedetto2025}, e que o português e os exames brasileiros estão pouco representados nessa literatura.
+
+Propomos uma abordagem diferente, baseada em três ideias. Primeiro, em vez de pedir ao modelo a resposta da questão, perguntamos pela \emph{atratividade} de cada alternativa e comparamos as alternativas \emph{duas a duas}, perguntando qual delas seria escolhida por mais participantes. Segundo, agregamos essas respostas com modelos clássicos de escolha: a softmax do modelo nominal de \citet{bock1972} e o modelo de comparações entre pares de \citet{bradley1952}, ambos fundados no modelo de escolha de \citet{luce1959}, com a escala ajustada por uma temperatura \citep{guo2017}. Terceiro, usamos o Jev \citep{typesafe2026docs}, um modelo de linguagem pós-treinado para devolver decisões estruturadas com probabilidades calibradas, em vez de texto, o que torna essas perguntas diretas e baratas.
+
+Avaliamos a abordagem em 234 questões textualmente autossuficientes do ENEM 2024 e 2025, com as proporções de escolha calculadas a partir dos microdados oficiais, sobre mais de um milhão de respostas válidas por questão \citep{inep2025microdados2024,inep2026microdados2025}. Todas as escolhas de método foram feitas com as questões de 2025; a configuração resultante e as hipóteses foram congeladas e registradas publicamente antes de ser aplicadas, uma única vez, às questões de 2024.
+
+As contribuições do trabalho são:
+\begin{enumerate}[nosep]
+  \item um método para prever a distribuição completa de escolhas de um item de múltipla escolha a partir do texto, sem dados de respostas, combinando a atratividade por alternativa e comparações entre pares, agregadas por modelos de escolha e calibradas por temperatura;
+  \item uma avaliação com teste pré-registrado no ENEM, na qual o método, sem acesso ao gabarito, superou a linha de base que conhece o gabarito e identificou o distrator mais escolhido em 46\% das questões (acaso: 25\%), com cerca de 70\% de acerto nas comparações entre pares de distratores, e 80\% quando a diferença real entre eles passava de 10 pontos percentuais;
+  \item evidências sobre como perguntar: avaliações isoladas de cada alternativa convergem para um único juízo de correção, perguntas sobre mecanismos de atração não acrescentaram informação confiável, e as comparações entre pares ajudaram (os resultados negativos também são relatados);
+  \item uma comparação com um LLM generativo, que mostra que o método também funciona nele, ao contrário do uso habitual, e que o Jev foi a implementação mais barata e mais estável;
+  \item a disponibilização do acervo de questões, das respostas brutas dos modelos, do código e dos registros de congelamento.
+\end{enumerate}
+
+O restante do artigo está organizado assim: a Seção~\ref{sec:referencial} apresenta o referencial teórico; a Seção~\ref{sec:metodo}, os dados, o método e o desenho experimental; a Seção~\ref{sec:resultados}, os resultados; e a Seção~\ref{sec:discussao} discute as implicações, inclusive para o processo de elaboração de itens do ENEM, e as limitações do estudo.
