@@ -3,9 +3,10 @@
 \centering
 \caption{Desenvolvimento em 2025: previsões fora da dobra (114 questões, 5 dobras). Análise descritiva.}\label{tab:desenvolvimento}
 \small
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{lcccc}
 \toprule
-Método & Brier \menor & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior \\
+Método & \makecell{Brier\\\menor} & \makecell{Spearman\\distr. \maior} & \makecell{Principal\\distrator \maior} & \makecell{AUC\\$<$5\% \maior} \\
 \midrule
 Atratividade + pares (combinação) & $\mathbf{0{,}0391}$ & $0{,}382$ & $0{,}447$ & $\mathbf{0{,}837}$ \\
 Pares (Bradley-Terry) & $0{,}0396$ & $\mathbf{0{,}386}$ & $\mathbf{0{,}452}$ & $0{,}831$ \\
@@ -19,4 +20,5 @@ Uniforme & $0{,}0953$ & --- & $0{,}250$ & $0{,}500$ \\
 Média por área & $0{,}1002$ & $0{,}077$ & $0{,}281$ & $0{,}471$ \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \end{table}

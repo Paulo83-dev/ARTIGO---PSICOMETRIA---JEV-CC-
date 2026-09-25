@@ -4,9 +4,10 @@
 \caption{Teste em 2024: métricas descritivas (120 questões).}\label{tab:teste}
 \small
 \setlength{\tabcolsep}{4pt}
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{lcccccc}
 \toprule
-Método & Brier \menor & MAE \menor & Spearman \maior & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior \\
+Método & \makecell{Brier\\\menor} & \makecell{MAE\\\menor} & \makecell{Spearman\\\maior} & \makecell{Spearman\\distr. \maior} & \makecell{Principal\\distrator \maior} & \makecell{AUC\\$<$5\% \maior} \\
 \midrule
 Atratividade + pares (principal) & $\mathbf{0{,}0420}$ & $\mathbf{0{,}0665}$ & $0{,}627$ & $0{,}443$ & $\mathbf{0{,}458}$ & $\mathbf{0{,}746}$ \\
 Atratividade (proporção) & $0{,}0453$ & $0{,}0695$ & $\mathbf{0{,}641}$ & $\mathbf{0{,}468}$ & $0{,}438$ & $0{,}723$ \\
@@ -16,4 +17,5 @@ Média por área de 2025 & $0{,}1014$ & $0{,}1038$ & $0{,}129$ & $0{,}140$ & $0{
 Uniforme & $0{,}1024$ & $0{,}1057$ & --- & --- & $0{,}250$ & $0{,}500$ \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \end{table}

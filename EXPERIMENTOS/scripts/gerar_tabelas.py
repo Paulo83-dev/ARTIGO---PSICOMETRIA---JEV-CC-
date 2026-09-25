@@ -60,11 +60,24 @@ def tabela_metricas(linhas, colunas, separar_apos=None):
     return cab, corpo
 
 
+def empilhar(celula):
+    """Cabeçalho de métrica em duas linhas (primeira palavra em cima, resto e seta embaixo)."""
+    nome = celula.strip()
+    if " " not in nome or not nome.endswith(("\\menor", "\\maior")):
+        return nome
+    primeira, resto = nome.split(" ", 1)
+    return f"\\makecell{{{primeira}\\\\{resto}}}"
+
+
 def ambiente(legenda, rotulo, alinhamento, cab, corpo, extra=""):
+    celulas = cab.strip().removesuffix("\\\\").split("&")
+    cab = " & ".join(empilhar(c) for c in celulas) + " \\\\"
+    # adjustbox só reduz a tabela se, mesmo com o cabeçalho empilhado, ela passar da largura do texto
     return (AVISO + "\\begin{table}[ht]\n\\centering\n"
             f"\\caption{{{legenda}}}\\label{{{rotulo}}}\n\\small\n{extra}"
+            "\\begin{adjustbox}{max width=\\linewidth}\n"
             f"\\begin{{tabular}}{{{alinhamento}}}\n\\toprule\n{cab}\n\\midrule\n"
-            + "\n".join(corpo) + "\n\\bottomrule\n\\end{tabular}\n\\end{table}\n")
+            + "\n".join(corpo) + "\n\\bottomrule\n\\end{tabular}\n\\end{adjustbox}\n\\end{table}\n")
 
 
 def grava(nome, conteudo):

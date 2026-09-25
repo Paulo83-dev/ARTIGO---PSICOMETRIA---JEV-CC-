@@ -3,9 +3,10 @@
 \centering
 \caption{Comparação com o LLM em 2024 (análise acrescentada depois do teste principal). Diferenças de Brier, $a - b$; valores negativos favorecem $a$.}\label{tab:llm}
 \small
+\begin{adjustbox}{max width=\linewidth}
 \begin{tabular}{llcc}
 \toprule
-& Comparação ($a$ $\times$ $b$) & Diferença & IC 95\% \\
+ & Comparação ($a$ $\times$ $b$) & Diferença & IC 95\% \\
 \midrule
 C1 & Jev, principal $\times$ LLM, método A (letras) & $-0{,}0109$ & $[-0{,}0166;\ -0{,}0055]$ \\
 C2 & Jev, principal $\times$ LLM, método B (atratividade + pares) & $-0{,}0025$ & $[-0{,}0067;\ 0{,}0018]$ \\
@@ -13,4 +14,5 @@ C3 & Jev, atratividade $\times$ LLM, atratividade (método B) & $-0{,}0050$ & $[
 C4 & LLM, método A $\times$ Oracle (usa o gabarito) & $0{,}0008$ & $[-0{,}0029;\ 0{,}0042]$ \\
 \bottomrule
 \end{tabular}
+\end{adjustbox}
 \end{table}
