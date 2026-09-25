@@ -1,0 +1,131 @@
+% 03_metodo: ver ROTEIRO.md
+% STATUS: primeira versão para revisão
+
+\section{Método}\label{sec:metodo}
+
+\subsection{Dados}\label{sec:dados}
+
+\paragraph{Questões.} Partimos dos cadernos azuis das aplicações regulares impressas do ENEM 2024 e 2025. Em cada edição foram inventariadas 185 versões de questões: as 180 posições das quatro áreas do conhecimento (Linguagens, Códigos e suas Tecnologias, LC; Ciências Humanas, CH; Ciências da Natureza, CN; Matemática, MT) e as variantes em inglês e em espanhol das cinco primeiras posições de Linguagens. Foram mantidas apenas as questões \emph{textualmente autossuficientes}, isto é, que podem ser resolvidas somente com o texto do enunciado e das alternativas. Foram excluídas todas as questões que dependem de imagem, gráfico, diagrama, quadro ou outro elemento visual, no enunciado ou nas alternativas, mesmo quando esse elemento parecia passível de descrição, além das questões anuladas. A elegibilidade foi decidida sem consultar o gabarito, os parâmetros da Teoria de Resposta ao Item (TRI), as frequências de resposta ou o desempenho de qualquer modelo, e cada decisão e cada transcrição foram revisadas pelo pesquisador.
+
+O acervo final tem 234 questões: 114 de 2025 (66 excluídas por elemento visual e 5 anuladas) e 120 de 2024 (64 excluídas por elemento visual e 1 anulada). A Tabela~\ref{tab:itens} mostra a distribuição por área. Quinze questões são de língua estrangeira (seis de inglês e nove de espanhol). Para cada questão, o conteúdo apresentado aos modelos é um objeto com a área, o texto de apoio compartilhado (presente em cinco questões de 2025), o texto principal e as cinco alternativas; esse objeto não contém o gabarito nem nenhuma informação sobre as respostas.
+
+\begin{table}[ht]
+\centering
+\caption{Questões textualmente autossuficientes por área e edição.}\label{tab:itens}
+\begin{tabular}{lcc}
+\toprule
+Área & 2025 (desenvolvimento) & 2024 (teste) \\
+\midrule
+Linguagens (LC)            & 37 & 42 \\
+Ciências Humanas (CH)      & 40 & 42 \\
+Ciências da Natureza (CN)  & 19 & 17 \\
+Matemática (MT)            & 18 & 19 \\
+\midrule
+Total                      & 114 & 120 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Escolhas observadas.} As proporções de escolha foram calculadas a partir dos microdados oficiais de cada edição \citep{inep2025microdados2024,inep2026microdados2025}. Cada questão foi associada, pelo código oficial do item, às posições que ocupa nas diferentes cores de caderno, e foram considerados os participantes presentes nas provas regulares impressas. Para a alternativa $k$ da questão $i$, a proporção observada é
+\begin{equation}
+y_{ik} = \frac{n_{ik}}{\sum_{h \in \{A,\dots,E\}} n_{ih}},
+\end{equation}
+em que $n_{ik}$ é o número de participantes que marcaram $k$. Respostas em branco, com dupla marcação ou inválidas foram contadas separadamente e não entram no denominador; as proporções são, portanto, condicionadas a uma marcação válida (em média, 99,4\% dos participantes expostos a cada questão). O número de respostas válidas por questão vai de 1,31 a 3,36 milhões; os valores menores correspondem às questões de língua estrangeira, em que os participantes se dividem entre inglês e espanhol. Só as contagens agregadas por questão foram guardadas; nenhuma resposta individual integra o acervo.
+
+A taxa média de acerto foi de 39,5\% em 2025 e 40,1\% em 2024. Em 28 questões de 2025 e 32 de 2024, um distrator foi mais escolhido que a alternativa correta. Para cada questão, o acervo registra também o gabarito e os parâmetros $a$, $b$ e $c$ da tabela oficial de itens de cada edição.
+
+\subsection{O Jev}\label{sec:jev}
+
+O Jev (versão \texttt{jev-1.13.0}; \citealp{typesafe2026docs}) é um modelo de linguagem pós-treinado para, em vez de gerar texto, devolver decisões estruturadas acompanhadas de distribuições de probabilidade sobre um conjunto fechado de opções, categoria que a desenvolvedora denomina modelos ``System One''. Segundo a documentação, o pós-treino busca probabilidades calibradas, no sentido de que a probabilidade atribuída a uma resposta reflita a chance de ela estar correta. Cada requisição contém um \emph{estado} (o conteúdo avaliado) e um conjunto de perguntas tipadas, respondidas de forma independente umas das outras. Usamos duas das três primitivas disponíveis:
+\begin{itemize}[nosep]
+  \item \textbf{Score}: posiciona o estado numa escala de níveis ordenados descritos em texto e devolve a probabilidade de cada nível e um \emph{escore}, a média dos números dos níveis ponderada por essas probabilidades;
+  \item \textbf{Choice}: escolhe uma opção num conjunto fechado e devolve a probabilidade de cada opção.
+\end{itemize}
+Em todas as requisições, o estado foi o objeto de entrada da questão (Seção~\ref{sec:dados}), sem gabarito, e cada pergunta indicou a alternativa avaliada pelo caminho do campo correspondente no estado (por exemplo, \texttt{alternativas.C}). Usamos sempre a versão fixa do modelo, e não o nome genérico que aponta para a versão mais recente.
+
+\subsection{Das respostas do Jev à distribuição de escolhas}\label{sec:transformacao}
+
+\paragraph{Atratividade por alternativa.} A pergunta principal de atratividade, do tipo Score, foi aplicada a cada uma das cinco alternativas:
+\begin{quote}
+\small ``Quantos participantes do ENEM escolheriam a alternativa em \texttt{alternativas.C} como resposta desta questão?'' Foco: ``Considere participantes reais do ENEM, com níveis variados de preparo, lendo a questão inteira em condições de prova. Julgue apenas a alternativa indicada.''
+\end{quote}
+Os cinco níveis, do mais baixo ao mais alto, descrevem situações: ``quase ninguém escolheria'', ``poucos escolheriam'', ``uma parcela considerável escolheria'', ``muitos escolheriam'' e ``a maioria escolheria'', cada um acompanhado de sinais concretos (Apêndice~\ref{ap:perguntas}). Sendo $s_{ik}$ o escore da alternativa $k$, a distribuição prevista é
+\begin{equation}\label{eq:softmax}
+\hat{p}_{ik} = \frac{\exp(\beta\, s_{ik})}{\sum_{h} \exp(\beta\, s_{ih})},
+\end{equation}
+em que $\beta = 1/T$ é o inverso de uma temperatura $T$ ajustada aos dados de desenvolvimento (\textit{temperature scaling}; \citealp{guo2017}). A Equação~\eqref{eq:softmax} é o modelo nominal de \citet{bock1972} avaliado num nível fixo de habilidade: cada alternativa gera uma ``tendência de resposta'', e a proporção que escolhe cada uma é a softmax dessas tendências. Diferentemente do uso original de \citet{guo2017}, a temperatura aqui aproxima as probabilidades de uma \emph{distribuição populacional de escolhas}, e não da chance de acerto do modelo \citep{liusie2023,saeuberli2025}.
+
+\paragraph{Comparações entre pares.} Para cada par ordenado de alternativas $(i, j)$, uma pergunta do tipo Choice perguntou qual das duas seria escolhida por mais participantes:
+\begin{quote}
+\small ``Entre a alternativa em \texttt{alternativas.D} e a alternativa em \texttt{alternativas.B}, qual delas seria escolhida por mais participantes do ENEM ao responder esta questão?''
+\end{quote}
+Cada par foi perguntado nas duas ordens (20 perguntas por questão), porque a ordem de apresentação pode alterar as decisões do Jev \citep{li2026}. Sendo $P(i \mid i, j)$ a probabilidade de $i$ quando $i$ é apresentada primeiro, as duas ordens foram combinadas em
+\begin{equation}
+p_{ij} = \tfrac{1}{2}\left[ P(i \mid i, j) + 1 - P(j \mid j, i) \right].
+\end{equation}
+As dez comparações de cada questão foram convertidas numa força $\theta_k$ por alternativa pelo modelo de \citet{bradley1952}, em que $P(i \text{ vence } j) = \sigma(\theta_i - \theta_j)$, com $\sigma$ a função logística. As forças maximizam a verossimilhança com resultados suaves,
+\begin{equation}
+\sum_{i<j} \left[ p_{ij} \log \sigma(\theta_i - \theta_j) + (1 - p_{ij}) \log \sigma(\theta_j - \theta_i) \right] - \lambda \sum_k \theta_k^2,
+\end{equation}
+com $\sum_k \theta_k = 0$ e $\lambda = 0{,}01$; a penalidade evita forças infinitas quando o Jev devolve probabilidades iguais a 0 ou 1. Esse passo usa apenas as respostas do Jev. Sob o modelo de escolha de \citet{luce1959}, em que a razão entre as probabilidades de duas alternativas não depende das demais, a softmax das forças reconstrói a distribuição das cinco alternativas \citep{love1997,revuelta2005}.
+
+\paragraph{Combinação.} O escore de atratividade e a força dos pares foram combinados por um logit condicional,
+\begin{equation}\label{eq:combinacao}
+\hat{p}_{ik} = \frac{\exp(\beta_1 z^{(s)}_{ik} + \beta_2 z^{(\theta)}_{ik})}{\sum_{h} \exp(\beta_1 z^{(s)}_{ih} + \beta_2 z^{(\theta)}_{ih})},
+\end{equation}
+em que $z^{(s)}$ e $z^{(\theta)}$ são o escore e a força padronizados pela média e pelo desvio-padrão dos dados de ajuste. Os pesos $\beta_1$ e $\beta_2$ fazem o papel da temperatura. Em todos os métodos, os únicos parâmetros ajustados às escolhas dos participantes são a temperatura ou os pesos; os parâmetros foram estimados minimizando o Brier (Seção~\ref{sec:metricas}), por busca em grade para um parâmetro e por L-BFGS-B, com penalidade ridge de $0{,}001$, para dois ou mais.
+
+\subsection{Desenho experimental}\label{sec:desenho}
+
+O desenho separa um ano de desenvolvimento de um ano de teste (Figura~\ref{fig:desenho}). Todas as escolhas foram feitas com as 114 questões de 2025; a configuração resultante foi aplicada uma única vez às 120 questões de 2024.
+
+\paragraph{Desenvolvimento (2025).} As escolhas foram avaliadas por validação cruzada em cinco dobras. As questões que compartilham um texto de apoio foram mantidas na mesma dobra, e as áreas foram distribuídas de forma equilibrada entre as dobras. Em cada dobra, os parâmetros foram ajustados nas outras quatro e as previsões foram feitas na dobra excluída, de modo que cada questão recebeu uma previsão de um ajuste que não a usou. O desenvolvimento ocorreu em três rodadas, cada uma com as perguntas, a análise e a regra de decisão escritas antes da execução:
+\begin{enumerate}[nosep]
+  \item \textbf{Rodada 1}: nove perguntas por alternativa sobre atratividade, plausibilidade, esforço para descartar, correção, verdade local, correção parcial, semelhança com o texto e equívoco comum;
+  \item \textbf{Rodada 2}: nove perguntas sobre mecanismos de atração dos distratores, derivadas de estratégias de construção de distratores e de fatores de plausibilidade da literatura \citep{nagai2025,lee2025};
+  \item \textbf{Rodada 3}: as comparações entre pares.
+\end{enumerate}
+A regra de decisão da rodada 3 estabelecia que a combinação com os pares substituiria a pergunta de atratividade isolada somente se o intervalo de confiança de 95\% da diferença de Brier entre as duas estivesse inteiramente abaixo de zero.
+
+\paragraph{Congelamento.} Ao fim do desenvolvimento, o método principal (Equação~\eqref{eq:combinacao}), os comparadores, os parâmetros ajustados em todas as questões de 2025, as hipóteses e as regras de decisão foram registrados num arquivo de configuração e num documento, publicados num repositório de controle de versão antes da execução das requisições de 2024 (ver \emph{Disponibilidade de dados e código}); a data do registro fica documentada no histórico do repositório. O teste foi executado por um programa que apenas lê a configuração congelada, confere que as requisições usaram exatamente o mesmo modelo, o mesmo estado e as mesmas perguntas, e calcula as métricas; nenhum parâmetro é ajustado nesse passo. Os parâmetros congelados foram $T = 2{,}2601$ para a atratividade isolada e $\beta_1 = 0{,}175$ e $\beta_2 = 0{,}291$ (variáveis padronizadas) para a combinação.
+
+\begin{figure}[ht]
+\centering
+\fbox{\parbox{0.9\linewidth}{\centering\small [Figura a produzir: 2025 (rodadas 1--3, validação cruzada) $\rightarrow$ congelamento registrado $\rightarrow$ teste único em 2024 $\rightarrow$ comparação com o LLM, com congelamento próprio.]}}
+\caption{Desenho experimental.}\label{fig:desenho}
+\end{figure}
+
+\subsection{Linhas de base}\label{sec:linhasbase}
+
+Três linhas de base foram congeladas junto com o método principal:
+\begin{itemize}[nosep]
+  \item \textbf{Uniforme}: 20\% para cada alternativa, a previsão de quem não tem nenhuma informação sobre a questão;
+  \item \textbf{Média por área}: a proporção média de cada letra, por área, em 2025;
+  \item \textbf{Oracle}: a alternativa correta recebe a taxa média de acerto de 2025 (39,5\%), e as outras quatro dividem igualmente o restante. Essa linha de base, adaptada de \citet{saeuberli2025}, \emph{usa o gabarito}, informação que o Jev não recebe.
+\end{itemize}
+
+\subsection{Métricas e hipóteses}\label{sec:metricas}
+
+\paragraph{Métricas.} A métrica principal é o Brier da distribuição A--E,
+\begin{equation}
+B = \frac{1}{N} \sum_{i=1}^{N} \sum_{k} \left(\hat{p}_{ik} - y_{ik}\right)^2,
+\end{equation}
+que varia de 0 a 2; menor é melhor, e cada questão tem o mesmo peso. As métricas secundárias são o erro absoluto médio (MAE), a divergência de Jensen--Shannon e a correlação de Spearman entre as proporções previstas e observadas dentro de cada questão. Como o foco do estudo são os distratores, calculamos também métricas \emph{só entre distratores}: a alternativa correta é retirada, e as proporções previstas e observadas dos quatro distratores são renormalizadas para somar 1, o que corresponde à distribuição condicional ao erro do modelo logit aninhado \citep{bolt2012}. Nessa distribuição, calculamos o Brier, o Spearman e o \emph{acerto do principal distrator}, a proporção de questões em que o distrator com maior probabilidade prevista é o mais escolhido (em caso de empate previsto entre $k$ distratores, crédito de $1/k$). Por fim, a área sob a curva ROC (AUC) mede a capacidade de identificar distratores não funcionais, escolhidos por menos de 5\% dos participantes \citep{haladyna1993,tarrant2009}, a partir das probabilidades previstas.
+
+\paragraph{Hipóteses.} Quatro hipóteses foram registradas no congelamento:
+\begin{itemize}[nosep]
+  \item \textbf{H1 (principal)}: o Brier do método principal é menor que o da Oracle;
+  \item \textbf{H2}: o Brier do método principal é menor que o da distribuição uniforme;
+  \item \textbf{H3}: o acerto do principal distrator do método principal é maior que o acaso (25\%);
+  \item \textbf{H4}: o Brier do método principal é menor que o da atratividade isolada.
+\end{itemize}
+Cada hipótese é considerada sustentada se o intervalo de confiança de 95\% correspondente estiver inteiramente do lado previsto (abaixo de zero para as diferenças de Brier; acima de 25\% para H3). Os intervalos são percentis de 5.000 reamostragens \textit{bootstrap} pareadas, com semente fixa, em que as questões que compartilham texto de apoio são sorteadas juntas. As demais métricas, os resultados por área e as comparações com os outros comparadores são descritivos.
+
+\subsection{Comparação com um LLM generativo}\label{sec:llm}
+
+Depois do teste principal, acrescentamos uma comparação com um modelo de linguagem generativo, seguindo o mesmo protocolo: parâmetros ajustados apenas em 2025, congelados e registrados, e aplicados uma única vez a 2024. Usamos o \texttt{z-ai/glm-5.3-flash} por meio do OpenRouter, com um único provedor fixo, escolhido por devolver as 20 probabilidades de tokens mais altas; a geração usou temperatura 0. O modelo não permite desativar o raciocínio; usamos o menor esforço aceito e registramos o número de tokens de raciocínio de cada chamada. O conteúdo enviado foi o mesmo objeto de entrada, formatado como texto. Comparamos duas formas de usar o LLM:
+\begin{itemize}[nosep]
+  \item \textbf{Método A (padrão da literatura)}: o LLM responde à questão com uma letra, em cinco rotações cíclicas das alternativas; as probabilidades das letras no primeiro token da resposta passam por uma softmax com temperatura e são realinhadas e promediadas entre as rotações \citep{saeuberli2025};
+  \item \textbf{Método B (as mesmas perguntas)}: o LLM recebe a mesma pergunta de atratividade e as mesmas comparações entre pares feitas ao Jev; as probabilidades dos tokens fazem o papel das probabilidades do Jev (o escore de atratividade é a média dos níveis ponderada pelas probabilidades dos dígitos de 0 a 4), e a agregação é idêntica à da Seção~\ref{sec:transformacao}, com parâmetros próprios.
+\end{itemize}
+Registramos também o custo e o tempo das chamadas. As análises foram feitas em Python 3.11, com NumPy e SciPy.

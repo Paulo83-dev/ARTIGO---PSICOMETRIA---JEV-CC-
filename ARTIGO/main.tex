@@ -1,0 +1,52 @@
+% Artigo: atratividade de distratores do ENEM com o modelo Jev
+% Compilar com pdfLaTeX + BibTeX (Overleaf: Menu > Compiler > pdfLaTeX).
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[round,authoryear]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{enumitem}
+
+\graphicspath{{figuras/}}
+
+% Setas de sentido das métricas nas tabelas
+\newcommand{\menor}{$\downarrow$}
+\newcommand{\maior}{$\uparrow$}
+
+\title{Prevendo a atratividade de distratores do ENEM com um modelo de decisão calibrada:\\
+atratividade por alternativa e comparações entre pares}
+\author{Autor(es)}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{secoes/00_resumo}
+\input{secoes/01_introducao}
+\input{secoes/02_referencial}
+\input{secoes/03_metodo}
+\input{secoes/04_resultados}
+\input{secoes/05_discussao}
+\input{secoes/06_conclusao}
+\input{secoes/07_disponibilidade}
+
+\bibliographystyle{plainnat}
+\bibliography{referencias}
+
+\appendix
+\input{secoes/08_apendices}
+
+\end{document}
