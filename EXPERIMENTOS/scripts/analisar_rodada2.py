@@ -28,6 +28,7 @@ from analisar_rodada1 import (  # noqa: E402
     carregar, dobras_agrupadas, metricas, softmax, spearman_bruto_distratores,
 )
 from perguntas_rodada2 import PERGUNTAS as DEF_R2  # noqa: E402
+from tabelas import COLUNAS_METRICAS, tabela  # noqa: E402
 
 PERGUNTAS_R2 = list(DEF_R2)
 CANDIDATAS = ["q7", "q9"] + PERGUNTAS_R2  # características que podem ser somadas à q1b
@@ -100,6 +101,7 @@ def selecionar(base, feats, Y, grupos, area, semente=SEMENTE + 7):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # o console do Windows não imprime ↑ ↓ na codificação padrão
     ap = argparse.ArgumentParser()
     ap.add_argument("--ano", type=int, default=2025)
     ap.add_argument("--respostas1", required=True)
@@ -176,20 +178,16 @@ def main():
 
 
 def markdown(s):
-    f = lambda v: "—" if v is None else f"{v:.4f}"
     L = [f"# Rodada 2: resultados, ENEM {s['ano']} ({s['n_itens']} itens)", "",
+         "↓ menor é melhor; ↑ maior é melhor; melhor valor de cada coluna em negrito.", "",
          "## Características: ordenação dos distratores e redundância com q1b", "",
-         "Spearman bruto: escore sem ajuste × proporção real, só entre distratores (maior = melhor). "
-         "Correlação com q1b: dentro do item (menor = mais informação nova).", "",
-         "| Pergunta | Spearman bruto entre distratores | Correlação com q1b |", "|---|---|---|"]
-    for c, d in sorted(s["diagnostico_caracteristicas"].items(), key=lambda kv: -kv[1]["spearman"]):
-        L.append(f"| {c} | {d['spearman']:+.4f} | {d['corr_q1b']:+.2f} |")
-    L += ["", "## Previsão fora da dobra (5 dobras)", "",
-          "| Método | Brier | Spearman | Brier distr. | Spearman distr. | Principal distrator | AUC <5% |",
-          "|---|---|---|---|---|---|---|"]
-    for nome, r in sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]):
-        L.append(f"| {nome} | {f(r['brier'])} | {f(r['spearman_intraitem'])} | {f(r['brier_distratores'])} | "
-                 f"{f(r['spearman_distratores'])} | {f(r['acerto_principal_distrator'])} | {f(r['auc_nao_funcional'])} |")
+         "Spearman bruto: escore sem ajuste × proporção real, só entre distratores. "
+         "Correlação com q1b: dentro do item; valores próximos de zero indicam mais informação nova.", ""]
+    diag = sorted(s["diagnostico_caracteristicas"].items(), key=lambda kv: -kv[1]["spearman"])
+    L += tabela(diag, [("spearman", "Spearman bruto entre distratores", "maior", "{:+.4f}"),
+                       ("corr_q1b", "Correlação com q1b", None, "{:+.2f}")], primeira="Pergunta")
+    L += ["", "## Previsão fora da dobra (5 dobras)", ""]
+    L += tabela(sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]), COLUNAS_METRICAS)
     L += ["", "## Seleção de características",
           "", "Escolhas em cada dobra externa (só com o treino): "
           + "; ".join(", ".join(e) or "nenhuma" for e in s["selecao_em_cada_dobra_externa"]),

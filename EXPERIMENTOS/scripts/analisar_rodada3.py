@@ -23,6 +23,7 @@ from analisar_rodada1 import (  # noqa: E402
 )
 from analisar_rodada2 import LogitSimples  # noqa: E402
 from avaliar_teste import bootstrap_grupos  # noqa: E402
+from tabelas import COLUNAS_METRICAS, tabela  # noqa: E402
 
 LAMBDA_BT = 0.01
 PARES = list(combinations(range(5), 2))  # 10 pares não ordenados (i < j)
@@ -94,6 +95,7 @@ def diagnosticos(P1, p, Y, gab):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # o console do Windows não imprime ↑ ↓ na codificação padrão
     ap = argparse.ArgumentParser()
     ap.add_argument("--ano", type=int, default=2025)
     ap.add_argument("--respostas1", required=True)
@@ -156,24 +158,29 @@ def main():
     print(markdown(saida))
 
 
+def tabela_pares(dg):
+    # Compara tipos de par, e não métodos: sem seta nem negrito.
+    rot = {"so_distratores": "Só distratores", "com_correta": "Com a correta",
+           "so_distratores_dif>10pp": "Só distratores, diferença real > 10 p.p.",
+           "com_correta_dif>10pp": "Com a correta, diferença real > 10 p.p."}
+    linhas = [(rot[t], v) for t, v in dg["acuracia_por_par"].items()]
+    return tabela(linhas, [("acuracia", "Acurácia", None, "{:.4f}"), ("n_pares", "Pares", None, "{}")],
+                  primeira="Tipo de par")
+
+
 def markdown(s):
-    f = lambda v: "—" if v is None else f"{v:.4f}"
     dg = s["diagnosticos"]
     L = [f"# Rodada 3: comparações entre pares, ENEM {s['ano']} ({s['n_itens']} itens)", "",
+         "↓ menor é melhor; ↑ maior é melhor; melhor valor de cada coluna em negrito.", "",
          "## Diagnósticos", "",
          f"- Consistência entre as duas ordens: {dg['consistencia_entre_ordens']:.4f}",
          f"- Proporção em que o Jev escolhe a alternativa apresentada primeiro: {dg['proporcao_escolhe_a_primeira']:.4f}",
-         "", "| Tipo de par | Acurácia | Pares |", "|---|---|---|"]
-    for t, v in dg["acuracia_por_par"].items():
-        L.append(f"| {t} | {v['acuracia']:.4f} | {v['n_pares']} |")
-    L += ["", "## Previsão fora da dobra (5 dobras)", "",
-          "| Método | Brier | Spearman | Brier distr. | Spearman distr. | Principal distrator | AUC <5% |",
-          "|---|---|---|---|---|---|---|"]
-    for nome, r in sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]):
-        L.append(f"| {nome} | {f(r['brier'])} | {f(r['spearman_intraitem'])} | {f(r['brier_distratores'])} | "
-                 f"{f(r['spearman_distratores'])} | {f(r['acerto_principal_distrator'])} | {f(r['auc_nao_funcional'])} |")
+         ""]
+    L += tabela_pares(dg)
+    L += ["", "## Previsão fora da dobra (5 dobras)", ""]
+    L += tabela(sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]), COLUNAS_METRICAS)
     L += ["", "## Regra de decisão: diferença de Brier em relação à q1b", "",
-          "| Método | Diferença | IC 95% | Substitui a q1b? |", "|---|---|---|---|"]
+          "| Método | Diferença ↓ | IC 95% | Substitui a q1b? |", "|---|---|---|---|"]
     for nome, c in s["comparacao_com_q1b"].items():
         L.append(f"| {nome} | {c['diferenca_brier']:+.5f} | [{c['ic95'][0]:+.5f}; {c['ic95'][1]:+.5f}] | "
                  f"{'sim' if c['substitui_q1b'] else 'não'} |")

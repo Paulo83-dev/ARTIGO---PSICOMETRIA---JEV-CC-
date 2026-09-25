@@ -20,6 +20,10 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.stats import spearmanr
 
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from tabelas import COLUNAS_METRICAS, por_area, tabela  # noqa: E402
+
 RAIZ = Path(__file__).resolve().parents[2]
 ACERVO = RAIZ / "exportacao_acervo" / "acervo_questoes_aprovadas_enem_2024_2025.json"
 LETRAS = ["A", "B", "C", "D", "E"]
@@ -310,6 +314,7 @@ def auc_mann_whitney(escore, rotulo):
 # ---------------------------------------------------------------- execução
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # o console do Windows não imprime ↑ ↓ na codificação padrão
     ap = argparse.ArgumentParser()
     ap.add_argument("--ano", type=int, default=2025)
     ap.add_argument("--respostas", required=True)
@@ -406,24 +411,17 @@ def main():
 def tabela_markdown(s):
     linhas = [f"# Rodada 1: resultados fora da dobra, ENEM {s['ano']} ({s['n_itens']} itens, {s['n_dobras']} dobras)",
               "",
-              "Menor é melhor em Brier, MAE e JS; maior é melhor nas demais. "
+              "↓ menor é melhor; ↑ maior é melhor; melhor valor de cada coluna em negrito. "
               "'Distratores' = só os 4 distratores, renormalizados.",
-              "",
-              "| Método | Brier | MAE | JS | Spearman | Brier distr. | Spearman distr. | Principal distrator | AUC <5% |",
-              "|---|---|---|---|---|---|---|---|---|"]
+              ""]
     ordem = sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"])
-    fmt = lambda v: "—" if v is None or (isinstance(v, float) and np.isnan(v)) else f"{v:.4f}"
-    for nome, r in ordem:
-        linhas.append(f"| {nome} | {fmt(r['brier'])} | {fmt(r['mae'])} | {fmt(r['jensen_shannon'])} | "
-                      f"{fmt(r['spearman_intraitem'])} | {fmt(r['brier_distratores'])} | "
-                      f"{fmt(r['spearman_distratores'])} | {fmt(r['acerto_principal_distrator'])} | "
-                      f"{fmt(r['auc_nao_funcional'])} |")
+    linhas += tabela(ordem, COLUNAS_METRICAS)
     linhas += ["", "Observação: nas perguntas de característica (q4–q9), a softmax ajustada nas 5 alternativas "
                "pode inverter o sinal da pergunta; para elas, a métrica adequada é a da tabela seguinte.",
-               "", "## Escore bruto × proporção real, só entre distratores (sem ajuste)", "",
-               "| Pergunta | Spearman médio por item | Itens com variação |", "|---|---|---|"]
-    for nome, r in s["spearman_bruto_entre_distratores"].items():
-        linhas.append(f"| {nome} | {r['spearman']:+.4f} | {r['itens_com_variacao']} |")
+               "", "## Escore bruto × proporção real, só entre distratores (sem ajuste)", ""]
+    linhas += tabela(list(s["spearman_bruto_entre_distratores"].items()),
+                     [("spearman", "Spearman médio por item", "maior", "{:+.4f}"),
+                      ("itens_com_variacao", "Itens com variação", None, "{}")], primeira="Pergunta")
     C = s["correlacoes_entre_perguntas_dentro_do_item"]
     nomes = list(C)
     linhas += ["", "## Correlação entre perguntas (Spearman, centrado por item)", "",
@@ -431,15 +429,10 @@ def tabela_markdown(s):
     for a in nomes:
         linhas.append(f"| {a} | " + " | ".join(f"{C[a][b]:.2f}" for b in nomes) + " |")
     areas = list(s["itens_por_area"])
-    linhas += ["", "## Brier por área", "",
-               "| Método | " + " | ".join(f"{a} (n={s['itens_por_area'][a]})" for a in areas) + " |",
-               "|---|" + "---|" * len(areas)]
-    for nome, r in ordem:
-        linhas.append(f"| {nome} | " + " | ".join(fmt(r["brier_por_area"][a]) for a in areas) + " |")
-    linhas += ["", "## Acerto do principal distrator por área", "",
-               "| Método | " + " | ".join(areas) + " |", "|---|" + "---|" * len(areas)]
-    for nome, r in ordem:
-        linhas.append(f"| {nome} | " + " | ".join(fmt(r["acerto_principal_distrator_por_area"][a]) for a in areas) + " |")
+    rot = {a: f"{a} (n={s['itens_por_area'][a]})" for a in areas}
+    linhas += ["", "## Brier por área", ""] + por_area(ordem, "brier_por_area", areas, "menor", rot)
+    linhas += ["", "## Acerto do principal distrator por área", ""]
+    linhas += por_area(ordem, "acerto_principal_distrator_por_area", areas, "maior")
     return "\n".join(linhas) + "\n"
 
 

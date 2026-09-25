@@ -1,11 +1,11 @@
 # Rodada 1: resultados fora da dobra, ENEM 2025 (114 itens, 5 dobras)
 
-Menor é melhor em Brier, MAE e JS; maior é melhor nas demais. 'Distratores' = só os 4 distratores, renormalizados.
+↓ menor é melhor; ↑ maior é melhor; melhor valor de cada coluna em negrito. 'Distratores' = só os 4 distratores, renormalizados.
 
-| Método | Brier | MAE | JS | Spearman | Brier distr. | Spearman distr. | Principal distrator | AUC <5% |
+| Método | Brier ↓ | MAE ↓ | JS ↓ | Spearman ↑ | Brier distr. ↓ | Spearman distr. ↑ | Principal distrator ↑ | AUC <5% ↑ |
 |---|---|---|---|---|---|---|---|---|
-| combinacao_9 | 0.0404 | 0.0675 | 0.0339 | 0.5351 | 0.0439 | 0.2614 | 0.3684 | 0.8151 |
-| q1b | 0.0404 | 0.0673 | 0.0334 | 0.5776 | 0.0419 | 0.3454 | 0.4167 | 0.8302 |
+| combinacao_9 | **0.0404** | 0.0675 | 0.0339 | 0.5351 | 0.0439 | 0.2614 | 0.3684 | 0.8151 |
+| q1b | 0.0404 | **0.0673** | **0.0334** | **0.5776** | **0.0419** | 0.3454 | 0.4167 | **0.8302** |
 | q1a | 0.0413 | 0.0678 | 0.0339 | 0.5493 | 0.0422 | 0.2936 | 0.4211 | 0.8258 |
 | dois_niveis_q1b | 0.0416 | 0.0684 | 0.0341 | 0.5725 | 0.0424 | 0.3344 | 0.4123 | 0.8035 |
 | dois_niveis_q9 | 0.0429 | 0.0699 | 0.0355 | 0.5646 | 0.0458 | 0.3501 | 0.3947 | 0.7342 |
@@ -15,7 +15,7 @@ Menor é melhor em Brier, MAE e JS; maior é melhor nas demais. 'Distratores' = 
 | q2 | 0.0443 | 0.0703 | 0.0362 | 0.5572 | 0.0446 | 0.2918 | 0.3904 | 0.7687 |
 | dois_niveis_q1b (usa gabarito) | 0.0446 | 0.0718 | 0.0363 | 0.5592 | 0.0423 | 0.3454 | 0.4167 | 0.6864 |
 | q6 | 0.0453 | 0.0724 | 0.0370 | 0.5313 | 0.0462 | 0.2573 | 0.3618 | 0.8158 |
-| dois_niveis_q1b+q9 (usa gabarito) | 0.0460 | 0.0728 | 0.0374 | 0.5675 | 0.0423 | 0.3614 | 0.4474 | 0.6631 |
+| dois_niveis_q1b+q9 (usa gabarito) | 0.0460 | 0.0728 | 0.0374 | 0.5675 | 0.0423 | **0.3614** | **0.4474** | 0.6631 |
 | dois_niveis_q9 (usa gabarito) | 0.0470 | 0.0740 | 0.0385 | 0.5236 | 0.0447 | 0.2835 | 0.3889 | 0.6316 |
 | oracle (usa gabarito) | 0.0480 | 0.0761 | 0.0400 | 0.5365 | 0.0494 | — | 0.2500 | 0.5173 |
 | q5 | 0.0480 | 0.0749 | 0.0398 | 0.4803 | 0.0500 | 0.2179 | 0.3289 | 0.7097 |
@@ -29,10 +29,10 @@ Observação: nas perguntas de característica (q4–q9), a softmax ajustada nas
 
 ## Escore bruto × proporção real, só entre distratores (sem ajuste)
 
-| Pergunta | Spearman médio por item | Itens com variação |
+| Pergunta | Spearman médio por item ↑ | Itens com variação |
 |---|---|---|
 | q1a | +0.2936 | 114 |
-| q1b | +0.3454 | 114 |
+| q1b | **+0.3454** | 114 |
 | q2 | +0.2918 | 114 |
 | q3 | +0.2285 | 114 |
 | q4 | +0.2562 | 111 |
@@ -58,18 +58,18 @@ Observação: nas perguntas de característica (q4–q9), a softmax ajustada nas
 
 ## Brier por área
 
-| Método | CH (n=40) | CN (n=19) | LC (n=37) | MT (n=18) |
+| Método | CH (n=40) ↓ | CN (n=19) ↓ | LC (n=37) ↓ | MT (n=18) ↓ |
 |---|---|---|---|---|
-| combinacao_9 | 0.0370 | 0.0452 | 0.0385 | 0.0467 |
-| q1b | 0.0362 | 0.0483 | 0.0385 | 0.0455 |
+| combinacao_9 | 0.0370 | **0.0452** | 0.0385 | 0.0467 |
+| q1b | 0.0362 | 0.0483 | **0.0385** | 0.0455 |
 | q1a | 0.0361 | 0.0489 | 0.0408 | 0.0457 |
 | dois_niveis_q1b | 0.0366 | 0.0507 | 0.0399 | 0.0462 |
-| dois_niveis_q9 | 0.0346 | 0.0541 | 0.0444 | 0.0463 |
+| dois_niveis_q9 | **0.0346** | 0.0541 | 0.0444 | 0.0463 |
 | dois_niveis_q1b+q9 | 0.0361 | 0.0530 | 0.0444 | 0.0454 |
 | q4 | 0.0365 | 0.0500 | 0.0451 | 0.0472 |
 | q3 | 0.0395 | 0.0499 | 0.0413 | 0.0513 |
 | q2 | 0.0374 | 0.0520 | 0.0456 | 0.0486 |
-| dois_niveis_q1b (usa gabarito) | 0.0363 | 0.0584 | 0.0477 | 0.0423 |
+| dois_niveis_q1b (usa gabarito) | 0.0363 | 0.0584 | 0.0477 | **0.0423** |
 | q6 | 0.0364 | 0.0550 | 0.0483 | 0.0488 |
 | dois_niveis_q1b+q9 (usa gabarito) | 0.0350 | 0.0668 | 0.0469 | 0.0469 |
 | dois_niveis_q9 (usa gabarito) | 0.0348 | 0.0698 | 0.0474 | 0.0494 |
@@ -83,25 +83,25 @@ Observação: nas perguntas de característica (q4–q9), a softmax ajustada nas
 
 ## Acerto do principal distrator por área
 
-| Método | CH | CN | LC | MT |
+| Método | CH ↑ | CN ↑ | LC ↑ | MT ↑ |
 |---|---|---|---|---|
 | combinacao_9 | 0.4000 | 0.2105 | 0.4324 | 0.3333 |
 | q1b | 0.4500 | 0.2632 | 0.5000 | 0.3333 |
-| q1a | 0.4250 | 0.3684 | 0.4865 | 0.3333 |
+| q1a | 0.4250 | **0.3684** | 0.4865 | 0.3333 |
 | dois_niveis_q1b | 0.4500 | 0.2632 | 0.4865 | 0.3333 |
 | dois_niveis_q9 | 0.4000 | 0.2632 | 0.5405 | 0.2222 |
-| dois_niveis_q1b+q9 | 0.3750 | 0.3158 | 0.5946 | 0.2778 |
+| dois_niveis_q1b+q9 | 0.3750 | 0.3158 | **0.5946** | 0.2778 |
 | q4 | 0.3625 | 0.1667 | 0.4054 | 0.2176 |
 | q3 | 0.4375 | 0.3158 | 0.2838 | 0.3889 |
 | q2 | 0.4250 | 0.3421 | 0.4324 | 0.2778 |
 | dois_niveis_q1b (usa gabarito) | 0.4500 | 0.2632 | 0.5000 | 0.3333 |
 | q6 | 0.3812 | 0.2632 | 0.4595 | 0.2222 |
-| dois_niveis_q1b+q9 (usa gabarito) | 0.3750 | 0.3684 | 0.5946 | 0.3889 |
+| dois_niveis_q1b+q9 (usa gabarito) | 0.3750 | **0.3684** | **0.5946** | 0.3889 |
 | dois_niveis_q9 (usa gabarito) | 0.3750 | 0.2632 | 0.5000 | 0.3241 |
 | oracle (usa gabarito) | 0.2500 | 0.2500 | 0.2500 | 0.2500 |
 | q5 | 0.3875 | 0.1316 | 0.3784 | 0.3056 |
 | q9 | 0.1500 | 0.2368 | 0.1081 | 0.0556 |
-| q7 | 0.4750 | 0.3158 | 0.4595 | 0.2500 |
+| q7 | **0.4750** | 0.3158 | 0.4595 | 0.2500 |
 | comprimento | 0.2208 | 0.2368 | 0.1622 | 0.2222 |
 | uniforme | 0.2500 | 0.2500 | 0.2500 | 0.2500 |
-| media_por_area | 0.2500 | 0.2632 | 0.2162 | 0.5000 |
+| media_por_area | 0.2500 | 0.2632 | 0.2162 | **0.5000** |

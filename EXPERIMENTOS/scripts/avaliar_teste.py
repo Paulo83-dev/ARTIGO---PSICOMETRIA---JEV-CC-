@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from analisar_rodada1 import LETRAS, PERGUNTAS, RAIZ, ACERVO, carregar, metricas, softmax  # noqa: E402
 import perguntas_rodada1  # noqa: E402
 import perguntas_rodada3  # noqa: E402
+from tabelas import COLUNAS_METRICAS, por_area, tabela  # noqa: E402
 
 
 def conferir_requisicoes(caminho, cfg, ano, modulo_perguntas=perguntas_rodada1):
@@ -96,6 +97,7 @@ def acerto_principal_distrator_por_item(P, Y, gab):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")  # o console do Windows não imprime ↑ ↓ na codificação padrão
     ap = argparse.ArgumentParser()
     ap.add_argument("--congelamento", required=True)
     ap.add_argument("--respostas", required=True, help="respostas da rodada 1")
@@ -149,8 +151,9 @@ def main():
 
 
 def markdown(s):
-    f = lambda v: "—" if v is None else f"{v:.4f}"
+    from analisar_rodada3 import tabela_pares
     L = [f"# Teste da configuração congelada: ENEM {s['ano']} ({s['n_itens']} itens)", "",
+         "↓ menor é melhor; ↑ maior é melhor; melhor valor de cada coluna em negrito.", "",
          "## Hipóteses pré-registradas", "",
          "| Id | Hipótese | Estimativa | IC 95% | Sustentada? |", "|---|---|---|---|---|"]
     for h in s["hipoteses"]:
@@ -160,21 +163,12 @@ def markdown(s):
     L += ["", "## Comparações entre pares (descritivo)", "",
           f"- Consistência entre as duas ordens: {dg['consistencia_entre_ordens']:.4f}",
           f"- Proporção em que o Jev escolhe a alternativa apresentada primeiro: {dg['proporcao_escolhe_a_primeira']:.4f}",
-          "", "| Tipo de par | Acurácia | Pares |", "|---|---|---|"]
-    for t, v in dg["acuracia_por_par"].items():
-        L.append(f"| {t} | {v['acuracia']:.4f} | {v['n_pares']} |")
-    L += ["", "## Métricas descritivas", "",
-          "| Método | Brier | MAE | Spearman | Brier distr. | Spearman distr. | Principal distrator | AUC <5% |",
-          "|---|---|---|---|---|---|---|---|"]
-    for nome, r in sorted(s["resultados"].items(), key=lambda kv: kv[1]["brier"]):
-        L.append(f"| {nome} | {f(r['brier'])} | {f(r['mae'])} | {f(r['spearman_intraitem'])} | "
-                 f"{f(r['brier_distratores'])} | {f(r['spearman_distratores'])} | "
-                 f"{f(r['acerto_principal_distrator'])} | {f(r['auc_nao_funcional'])} |")
+          ""]
+    L += tabela_pares(dg)
+    ordem = sorted(s["resultados"].items(), key=lambda kv: kv[1]["brier"])
+    L += ["", "## Métricas descritivas", ""] + tabela(ordem, COLUNAS_METRICAS)
     areas = sorted(next(iter(s["resultados"].values()))["brier_por_area"])
-    L += ["", "## Brier por área (descritivo)", "", "| Método | " + " | ".join(areas) + " |",
-          "|---|" + "---|" * len(areas)]
-    for nome, r in sorted(s["resultados"].items(), key=lambda kv: kv[1]["brier"]):
-        L.append(f"| {nome} | " + " | ".join(f(r["brier_por_area"][a]) for a in areas) + " |")
+    L += ["", "## Brier por área (descritivo)", ""] + por_area(ordem, "brier_por_area", areas, "menor")
     return "\n".join(L) + "\n"
 
 
