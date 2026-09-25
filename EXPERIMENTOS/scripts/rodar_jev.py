@@ -1,7 +1,7 @@
-"""Envia as perguntas da rodada 1 ao Jev, um item por requisição, e grava tudo em JSONL.
+"""Envia as perguntas de uma rodada ao Jev, um item por requisição, e grava tudo em JSONL.
 
 Uso:
-    python EXPERIMENTOS/scripts/rodar_jev.py --itens 2025-CH-046 2025-MT-136 --saida EXPERIMENTOS/resultados/teste_inicial.jsonl
+    python EXPERIMENTOS/scripts/rodar_jev.py --rodada 1 --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl
 
 Cada linha do JSONL guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a
 resposta bruta. Itens que já têm resposta válida no arquivo de saída não são reenviados.
@@ -18,7 +18,11 @@ from pathlib import Path
 import httpx
 
 sys.path.insert(0, str(Path(__file__).parent))
-from perguntas_rodada1 import montar_perguntas  # noqa: E402
+import perguntas_rodada1  # noqa: E402
+import perguntas_rodada2  # noqa: E402
+import perguntas_rodada3  # noqa: E402
+
+RODADAS = {1: perguntas_rodada1, 2: perguntas_rodada2, 3: perguntas_rodada3}
 
 RAIZ = Path(__file__).resolve().parents[2]
 ACERVO = RAIZ / "exportacao_acervo" / "acervo_questoes_aprovadas_enem_2024_2025.json"
@@ -73,6 +77,7 @@ def main():
     ap.add_argument("--itens", nargs="*", help="registro_id dos itens; omitido = todos do ano")
     ap.add_argument("--ano", type=int, help="usar todos os itens deste ano")
     ap.add_argument("--saida", required=True)
+    ap.add_argument("--rodada", type=int, choices=sorted(RODADAS), default=1)
     args = ap.parse_args()
 
     questoes = json.loads(ACERVO.read_text(encoding="utf-8"))["questoes"]
@@ -87,7 +92,7 @@ def main():
     saida = RAIZ / args.saida
     saida.parent.mkdir(parents=True, exist_ok=True)
     feitos = ja_respondidos(saida)
-    perguntas = montar_perguntas()
+    perguntas = RODADAS[args.rodada].montar_perguntas()
     chave = ler_chave()
 
     with httpx.Client() as cliente, saida.open("a", encoding="utf-8") as f:

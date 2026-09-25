@@ -1,0 +1,98 @@
+{
+ "descricao": "Configuração congelada com base exclusivamente no ENEM 2025, a ser aplicada uma única vez ao ENEM 2024. Ver congelamento_teste_2024.md.",
+ "data_congelamento": "2026-09-25",
+ "ano_desenvolvimento": 2025,
+ "ano_teste": 2024,
+ "modelo": "jev-1.13.0",
+ "modelo_respondente": "jev-1.13.0",
+ "requisicoes": {
+  "rodada_1": {
+   "comando": "python EXPERIMENTOS/scripts/rodar_jev.py --rodada 1 --ano 2024 --saida EXPERIMENTOS/resultados/jev_rodada1_2024.jsonl",
+   "perguntas": "EXPERIMENTOS/scripts/perguntas_rodada1.py (as 9 perguntas da rodada 1, idênticas às usadas em 2025)",
+   "sha256_definicao_perguntas": "9017fbbf11e8971e15a8c79b43d621e6fff1a16c0c051c369184422e213da629"
+  },
+  "rodada_3": {
+   "comando": "python EXPERIMENTOS/scripts/rodar_jev.py --rodada 3 --ano 2024 --saida EXPERIMENTOS/resultados/jev_rodada3_2024.jsonl",
+   "perguntas": "EXPERIMENTOS/scripts/perguntas_rodada3.py (os 20 pares ordenados, idênticos aos usados em 2025)",
+   "sha256_definicao_perguntas": "5b6869c201a0b7de8b310c7b289f9e8f234e1b13561cf4b7c2a2771b2c95dfd4"
+  },
+  "state": "objeto entrada do acervo, sem gabarito"
+ },
+ "metodos": {
+  "q1b+pares (principal)": {
+   "tipo": "logit_q1b_pares",
+   "descricao": "Logit condicional com a q1b e a força de Bradley-Terry dos pares (ridge 0,01 por item); variáveis padronizadas com média e desvio de 2025",
+   "media": [1.382070175438597, 0.0],
+   "dp": [0.9718329193568109, 1.5785951385417165],
+   "beta_padronizado": [0.17537675612814682, 0.2905217359014857]
+  },
+  "q1b": {
+   "tipo": "softmax_pergunta",
+   "pergunta": "q1b",
+   "beta": 0.4424628878435058,
+   "temperatura_equivalente": 2.260076556643749
+  },
+  "q1a (sensibilidade)": {
+   "tipo": "softmax_pergunta",
+   "pergunta": "q1a",
+   "beta": 0.43845946676226744,
+   "temperatura_equivalente": 2.28071253058883
+  },
+  "oracle (usa gabarito)": {
+   "tipo": "oracle",
+   "acerto_medio": 0.3950710979001222
+  },
+  "uniforme": {
+   "tipo": "uniforme"
+  },
+  "media_por_area 2025": {
+   "tipo": "media_por_area",
+   "medias": {
+    "CH": {"A": 0.211912, "B": 0.207053, "C": 0.196596, "D": 0.180846, "E": 0.203593},
+    "CN": {"A": 0.200572, "B": 0.170545, "C": 0.216323, "D": 0.234035, "E": 0.178526},
+    "LC": {"A": 0.209489, "B": 0.182772, "C": 0.192422, "D": 0.213412, "E": 0.201904},
+    "MT": {"A": 0.200405, "B": 0.194127, "C": 0.26711, "D": 0.228292, "E": 0.110065}
+   }
+  }
+ },
+ "hipoteses": [
+  {
+   "id": "H1",
+   "papel": "principal",
+   "tipo": "diferenca_brier",
+   "metodo": "q1b+pares (principal)",
+   "comparador": "oracle (usa gabarito)",
+   "descricao": "Brier da combinação q1b + pares menor que o da Oracle (que conhece o gabarito)"
+  },
+  {
+   "id": "H2",
+   "papel": "secundaria",
+   "tipo": "diferenca_brier",
+   "metodo": "q1b+pares (principal)",
+   "comparador": "uniforme",
+   "descricao": "Brier da combinação q1b + pares menor que o da distribuição uniforme"
+  },
+  {
+   "id": "H3",
+   "papel": "secundaria",
+   "tipo": "principal_distrator_acima_do_acaso",
+   "metodo": "q1b+pares (principal)",
+   "acaso": 0.25,
+   "descricao": "Acerto do principal distrator da combinação acima do acaso (0,25)"
+  },
+  {
+   "id": "H4",
+   "papel": "secundaria",
+   "tipo": "diferenca_brier",
+   "metodo": "q1b+pares (principal)",
+   "comparador": "q1b",
+   "descricao": "Brier da combinação q1b + pares menor que o da q1b sozinha"
+  }
+ ],
+ "bootstrap": {
+  "reamostragens": 5000,
+  "semente": 2024,
+  "unidade": "grupo de itens (itens que compartilham texto de apoio são sorteados juntos)",
+  "intervalo": "percentil 95%"
+ }
+}

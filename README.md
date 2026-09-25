@@ -44,7 +44,7 @@ Os microdados devem ser citados conforme a orientação do Inep (seção 5 do Le
 - **Teste: ENEM 2024.** A configuração escolhida é congelada e registrada antes de ser aplicada, uma única vez, aos itens de 2024.
 - **Modelo:** versão fixa `jev-1.13.0`.
 
-Os detalhes de cada rodada estão no arquivo de especificação correspondente em `EXPERIMENTOS/`.
+Os detalhes de cada rodada estão no arquivo de especificação correspondente em `EXPERIMENTOS/`. A configuração do teste, as hipóteses e as regras de decisão estão em `EXPERIMENTOS/congelamento_teste_2024.md` (texto) e `congelamento_teste_2024.json` (parâmetros lidos pelo código); o teste é avaliado por `EXPERIMENTOS/scripts/avaliar_teste.py`.
 
 ## Como reproduzir
 
@@ -56,7 +56,7 @@ Requisitos: Python 3.11 ou superior e o pacote `httpx`.
    ```
 2. Envie as perguntas ao Jev (um item por requisição; itens já respondidos são pulados):
    ```
-   python EXPERIMENTOS/scripts/rodar_jev.py --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl
+   python EXPERIMENTOS/scripts/rodar_jev.py --rodada 1 --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl
    ```
 
 3. Rode a análise com validação cruzada no ano de desenvolvimento (gera um `.json` com todas as previsões e parâmetros e um `.md` com as tabelas):
@@ -64,5 +64,16 @@ Requisitos: Python 3.11 ou superior e o pacote `httpx`.
    python EXPERIMENTOS/scripts/analisar_rodada1.py --ano 2025 --respostas EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --saida EXPERIMENTOS/resultados/analise_rodada1_2025
    ```
    Requer também `numpy` e `scipy`.
+4. Rodada 2 (perguntas sobre o mecanismo de atração): envie com `--rodada 2` e analise combinando as duas rodadas:
+   ```
+   python EXPERIMENTOS/scripts/rodar_jev.py --rodada 2 --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada2_2025.jsonl
+   python EXPERIMENTOS/scripts/analisar_rodada2.py --ano 2025 --respostas1 EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --respostas2 EXPERIMENTOS/resultados/jev_rodada2_2025.jsonl --saida EXPERIMENTOS/resultados/analise_rodada2_2025
+   ```
+5. Rodada 3 (comparações entre pares de alternativas):
+   ```
+   python EXPERIMENTOS/scripts/rodar_jev.py --rodada 3 --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada3_2025.jsonl
+   python EXPERIMENTOS/scripts/analisar_rodada3.py --ano 2025 --respostas1 EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --respostas3 EXPERIMENTOS/resultados/jev_rodada3_2025.jsonl --saida EXPERIMENTOS/resultados/analise_rodada3_2025
+   ```
+6. Teste em 2024: os comandos estão na seção 6 de `EXPERIMENTOS/congelamento_teste_2024.md`.
 
 Cada linha do arquivo de saída das chamadas guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.

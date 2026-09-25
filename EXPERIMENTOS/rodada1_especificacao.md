@@ -1,6 +1,6 @@
 # Rodada 1: especificação das perguntas ao Jev
 
-Status: **rascunho para revisão** (2026-09-25). Nada foi executado.
+Status: **executada** no ENEM 2025 em 2026-09-25 (redação aprovada antes da execução).
 
 ## 1. Desenho
 
