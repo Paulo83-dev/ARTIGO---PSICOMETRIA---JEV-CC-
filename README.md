@@ -59,4 +59,10 @@ Requisitos: Python 3.11 ou superior e o pacote `httpx`.
    python EXPERIMENTOS/scripts/rodar_jev.py --ano 2025 --saida EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl
    ```
 
-Cada linha do arquivo de saída guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.
+3. Rode a análise com validação cruzada no ano de desenvolvimento (gera um `.json` com todas as previsões e parâmetros e um `.md` com as tabelas):
+   ```
+   python EXPERIMENTOS/scripts/analisar_rodada1.py --ano 2025 --respostas EXPERIMENTOS/resultados/jev_rodada1_2025.jsonl --saida EXPERIMENTOS/resultados/analise_rodada1_2025
+   ```
+   Requer também `numpy` e `scipy`.
+
+Cada linha do arquivo de saída das chamadas guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.
