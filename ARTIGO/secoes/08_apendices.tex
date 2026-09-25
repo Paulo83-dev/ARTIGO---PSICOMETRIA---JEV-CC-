@@ -1,11 +1,248 @@
-% 08_apendices: ver ROTEIRO.md
-% STATUS: a escrever
+% 08_apendices: GERADO AUTOMATICAMENTE por EXPERIMENTOS/scripts/gerar_apendice.py; não editar à mão.
 
 \section{Perguntas feitas ao Jev}\label{ap:perguntas}
 
-% TODO: Rodada 1
-% TODO: Rodada 2
-% TODO: Rodada 3
-% TODO: Parâmetros congelados
-% TODO: Tabelas completas do desenvolvimento
-% TODO: Prompts do LLM
+As perguntas estão reproduzidas exatamente como enviadas ao modelo, com a alternativa C como exemplo; nas demais alternativas, só muda a letra no caminho \texttt{alternativas.X}. Em cada requisição, o estado foi o objeto de entrada da questão, sem gabarito. O código entre parênteses identifica a pergunta nos arquivos do repositório.
+
+\subsection{Rodada 1: nove perguntas por alternativa}
+
+\paragraph{Atratividade (convencimento)} (\texttt{q1a}, tipo Score)
+
+\textit{Pergunta:} Quão atraente a alternativa em \texttt{alternativas.C} pareceria como resposta para um participante típico do ENEM tentando resolver esta questão?\\
+\textit{Foco:} Avalie a alternativa isoladamente. Julgue a plausibilidade de ela ser escolhida, inclusive por erro comum.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Esta alternativa é claramente incompatível com o enunciado; um participante atento a descartaria imediatamente.
+  \item Esta alternativa pode atrair uma leitura superficial, mas um entendimento básico da questão a torna pouco plausível.
+  \item Esta alternativa é plausível para participantes que cometam uma interpretação ou um cálculo equivocado.
+  \item Esta alternativa é bastante convincente e pode competir com outras respostas para muitos participantes.
+  \item Esta alternativa é fortemente convincente para quem tenta resolver a questão e tende a ser escolhida com frequência.
+\end{enumerate}
+
+\paragraph{Atratividade (proporção) --- pergunta de atratividade principal} (\texttt{q1b}, tipo Score)
+
+\textit{Pergunta:} Quantos participantes do ENEM escolheriam a alternativa em \texttt{alternativas.C} como resposta desta questão?\\
+\textit{Foco:} Considere participantes reais do ENEM, com níveis variados de preparo, lendo a questão inteira em condições de prova. Julgue apenas a alternativa indicada.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Quase ninguém escolheria: Descabida mesmo numa leitura apressada; só seria marcada por engano ou chute puro
+  \item Poucos escolheriam: Parece errada para a maioria; atrai sobretudo quem não entendeu o comando ou chutou
+  \item Uma parcela considerável escolheria: Parece razoável numa leitura rápida, mas uma leitura atenta revela o problema
+  \item Muitos escolheriam: Parece a resposta certa para quem não domina bem o texto ou o conteúdo
+  \item A maioria escolheria: Parece a melhor resposta para quase todos os participantes
+\end{enumerate}
+
+\paragraph{Plausibilidade} (\texttt{q2}, tipo Score)
+
+\textit{Pergunta:} Quão plausível a alternativa em \texttt{alternativas.C} parece como resposta ao que a questão pede?\\
+\textit{Foco:} Julgue se ela tem a aparência de uma resposta adequada ao comando, considerando o texto da questão. Não julgue se ela está de fato correta.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Não tem relação com o que foi pedido: Fala de outro assunto ou não responde ao tipo de pergunta feita
+  \item Tem relação com o tema, mas claramente não serve como resposta: Menciona elementos do texto, mas não responde ao comando
+  \item Serve em parte como resposta: Responde ao comando de forma vaga, incompleta ou com um problema perceptível
+  \item Parece uma resposta adequada: Responde ao comando de forma coerente; se houver problema, ele é sutil
+  \item Parece a resposta mais adequada possível: Responde ao comando de forma completa, precisa e bem ajustada ao texto
+\end{enumerate}
+
+\paragraph{Esforço para descartar} (\texttt{q3}, tipo Score)
+
+\textit{Pergunta:} O que um participante precisa fazer para perceber que a alternativa em \texttt{alternativas.C} não é a resposta desta questão?\\
+\textit{Foco:} Considere o caminho mais curto para descartá-la. Se ela não puder ser descartada, escolha o nível correspondente.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Basta ler a própria alternativa: É incoerente, absurda ou fora do tema, independentemente da questão
+  \item Basta ler o comando da questão: Não responde ao que foi pedido, mesmo sem ler o texto de apoio
+  \item É preciso ler com atenção o texto de apoio ou os dados do enunciado: Contradiz, distorce ou extrapola algo que está explícito no texto ou nos dados
+  \item É preciso interpretação aprofundada, conhecimento específico ou várias etapas de raciocínio: O erro só aparece com inferência, domínio do conteúdo ou cálculo
+  \item Não é possível descartá-la: Mesmo com leitura atenta e bom conhecimento, ela parece a resposta correta
+\end{enumerate}
+
+\paragraph{É a resposta correta?} (\texttt{q4}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} é a resposta correta desta questão?\\
+\textit{Sim:} A alternativa responde corretamente ao comando, de acordo com o texto e o conhecimento da área.\\
+\textit{Não:} A alternativa não responde corretamente ao comando.
+
+\paragraph{Verdade local} (\texttt{q5}, tipo Noul)
+
+\textit{Pergunta:} O conteúdo da alternativa em \texttt{alternativas.C}, considerado isoladamente, é verdadeiro?\\
+\textit{Foco:} Julgue apenas se o que a alternativa afirma é verdadeiro ou compatível com o texto da questão e com o conhecimento correto da área. Não importa se ela responde ao que o comando pede.\\
+\textit{Sim:} O que a alternativa afirma é verdadeiro ou compatível com o texto, mesmo que não responda ao comando.\\
+\textit{Não:} O que a alternativa afirma é falso, contradiz o texto ou não tem apoio nele.
+
+\paragraph{Correção parcial} (\texttt{q6}, tipo Score)
+
+\textit{Pergunta:} Quanto do que a alternativa em \texttt{alternativas.C} afirma está correto em relação ao que a questão pede?\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Nada está correto: O conteúdo inteiro é errado ou irrelevante para o comando
+  \item Contém um elemento correto, mas o essencial está errado: Aproveita uma ideia certa, mas a conclusão ou o foco estão errados
+  \item Mistura partes corretas e incorretas em proporção semelhante: Metade da afirmação procede e a outra metade não
+  \item Quase tudo está correto, com um erro ou omissão importante: Está perto da resposta, mas uma palavra, condição ou detalhe a torna errada
+  \item Está totalmente correta: Responde ao comando sem erro nem omissão
+\end{enumerate}
+
+\paragraph{Eco do texto} (\texttt{q7}, tipo Score)
+
+\textit{Pergunta:} Quanto a alternativa em \texttt{alternativas.C} reaproveita palavras, expressões ou ideias que aparecem explicitamente no texto da questão?\\
+\textit{Foco:} Avalie só a semelhança de superfície com o texto, e não se a alternativa está correta.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Nada do texto aparece: Vocabulário e ideias sem relação com o texto
+  \item Trata do mesmo tema com vocabulário próprio: Assunto próximo, mas sem palavras-chave do texto
+  \item Usa algumas palavras-chave do texto: Termos importantes do texto aparecem, em frases diferentes
+  \item Parafraseia de perto um trecho do texto: Reformula uma frase ou ideia específica do texto
+  \item Copia literalmente trechos do texto: Repete palavra por palavra partes do texto
+\end{enumerate}
+
+\paragraph{Equívoco comum} (\texttt{q9}, tipo Score)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} corresponde a um erro que estudantes do ensino médio costumam cometer nesta questão?\\
+\textit{Foco:} Considere erros típicos: leitura apressada, confusão entre conceitos parecidos, generalização excessiva, inversão de causa e efeito, uso de conhecimento prévio no lugar do texto, erro de cálculo comum.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Não reflete nenhum erro típico: A alternativa é correta, ou é um erro arbitrário que quase ninguém cometeria
+  \item Reflete um erro possível, mas pouco comum: Exige uma confusão incomum para ser escolhida
+  \item Reflete um erro comum entre estudantes com dificuldade no conteúdo: Atrai quem tem lacunas de conhecimento ou de leitura
+  \item Reflete um erro muito comum, cometido mesmo por estudantes razoavelmente preparados: Explora uma armadilha conhecida da área ou do tipo de questão
+  \item Reflete o erro mais típico que esta questão provoca: É a armadilha principal do item
+\end{enumerate}
+
+\subsection{Rodada 2: mecanismos de atração dos distratores}
+
+\paragraph{Combinação incorreta de informações} (\texttt{q10}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} junta informações que aparecem em partes diferentes do texto da questão, relacionando-as de um modo que o texto não sustenta?\\
+\textit{Sim:} Combina elementos presentes no texto, mas a relação estabelecida entre eles (causa, comparação, conclusão) não está no texto.\\
+\textit{Não:} Não combina elementos do texto dessa forma, ou a relação que estabelece está no texto.
+
+\paragraph{Oposição} (\texttt{q11}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} afirma o contrário do que o texto da questão ou o conhecimento correto da área indicam?\\
+\textit{Sim:} Inverte o sentido de uma ideia do texto ou da área (nega o que é afirmado, troca causa e efeito, inverte uma relação).\\
+\textit{Não:} Não inverte o sentido de nenhuma ideia do texto ou da área.
+
+\paragraph{Fora do tema} (\texttt{q12}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} trata de um assunto que não aparece no texto da questão nem no comando?\\
+\textit{Sim:} Fala de algo alheio ao tema do texto e do que foi perguntado.\\
+\textit{Não:} Trata do tema do texto ou do que foi perguntado.
+
+\paragraph{Apelo do senso comum} (\texttt{q13}, tipo Score)
+
+\textit{Pergunta:} Quanto a alternativa em \texttt{alternativas.C} soa correta pelo senso comum, sem depender do texto da questão?\\
+\textit{Foco:} Imagine alguém que leu apenas a alternativa, sem o texto nem o comando. Julgue o quanto ela pareceria uma afirmação razoável.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Soa estranha ou absurda: Contraria o senso comum ou é incoerente em si
+  \item Soa pouco familiar: É uma afirmação técnica ou específica que poucos aceitariam sem pensar
+  \item Soa neutra: Não chama atenção nem como certa nem como errada
+  \item Soa razoável: É o tipo de afirmação que muitos aceitariam como verdadeira
+  \item Soa como verdade evidente: Parece óbvia, familiar ou politicamente correta; quase todos concordariam
+\end{enumerate}
+
+\paragraph{Confusão conceitual} (\texttt{q14}, tipo Score)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} usa um conceito, termo ou relação que pode ser facilmente confundido com o que a questão pede?\\
+\textit{Foco:} Considere conceitos vizinhos, termos parecidos ou relações próximas que um estudante poderia trocar entre si.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Nenhuma proximidade: Usa conceitos claramente distintos do que a questão pede
+  \item Proximidade vaga: Pertence à mesma área, mas a diferença é evidente
+  \item Proximidade moderada: Usa um conceito vizinho que exige atenção para distinguir
+  \item Proximidade forte: Usa um conceito ou termo que estudantes frequentemente confundem com o pedido
+  \item Quase indistinguível: A diferença para o que a questão pede é mínima e sutil
+\end{enumerate}
+
+\paragraph{Generalização excessiva} (\texttt{q15}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} apresenta uma ideia de forma mais ampla ou mais absoluta do que o texto da questão permite?\\
+\textit{Sim:} Estende uma ideia além do que o texto sustenta, por exemplo com ''sempre'', ''todos'', ''nunca'', ''apenas'', ''qualquer'', ou transformando um caso particular em regra.\\
+\textit{Não:} Mantém o alcance que o texto sustenta.
+
+\paragraph{Conhecimento prévio no lugar do texto} (\texttt{q16}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} afirma algo que é verdadeiro no mundo ou no senso comum, mas que não é dito nem sustentado pelo texto da questão?\\
+\textit{Sim:} A afirmação pode ser verdadeira em geral, mas o texto não a apoia.\\
+\textit{Não:} A afirmação é apoiada pelo texto, ou é falsa em geral.
+
+\paragraph{Resposta a outra pergunta} (\texttt{q17}, tipo Noul)
+
+\textit{Pergunta:} A alternativa em \texttt{alternativas.C} seria uma resposta adequada para uma pergunta diferente sobre o mesmo texto, mas não para a pergunta que foi feita?\\
+\textit{Sim:} Responde a outro aspecto do texto (outra personagem, outro trecho, outra finalidade), e não ao que o comando pede.\\
+\textit{Não:} Trata do que o comando pede, ou não serviria como resposta a nenhuma pergunta sobre o texto.
+
+\paragraph{Eco do comando} (\texttt{q18}, tipo Score)
+
+\textit{Pergunta:} Quanto a alternativa em \texttt{alternativas.C} reaproveita palavras ou expressões do comando da questão, isto é, da pergunta propriamente dita?\\
+\textit{Foco:} Considere apenas o comando, e não o texto de apoio. Avalie só a semelhança de superfície.\\
+\textit{Níveis (do mais baixo ao mais alto):}
+\begin{enumerate}[nosep,label=\arabic*.,start=0]
+  \item Nada do comando aparece: Nenhuma palavra ou expressão do comando
+  \item Relação distante: Tema do comando, com vocabulário próprio
+  \item Algumas palavras do comando: Repete um ou dois termos do comando
+  \item Muitas palavras do comando: Repete vários termos ou a estrutura da pergunta
+  \item Espelha o comando: Reformula a própria pergunta como resposta
+\end{enumerate}
+
+\subsection{Rodada 3: comparações entre pares}
+
+Uma pergunta do tipo Choice para cada um dos 20 pares ordenados de alternativas. Exemplo para o par (D, B), com D apresentada primeiro:
+
+\textit{Pergunta:} Entre a alternativa em \texttt{alternativas.D} e a alternativa em \texttt{alternativas.B}, qual delas seria escolhida por mais participantes do ENEM ao responder esta questão?\\
+\textit{Foco:} Considere participantes reais do ENEM, com níveis variados de preparo, lendo a questão inteira em condições de prova. Compare apenas essas duas alternativas.\\
+\textit{Opções (nesta ordem):}
+\begin{itemize}[nosep]
+  \item \texttt{D}: A alternativa em \texttt{alternativas.D} seria escolhida por mais participantes.
+  \item \texttt{B}: A alternativa em \texttt{alternativas.B} seria escolhida por mais participantes.
+\end{itemize}
+Na ordem inversa, a pergunta cita B primeiro e as opções aparecem na ordem B, D.
+
+\section{Parâmetros congelados}\label{ap:parametros}
+
+Parâmetros ajustados em todas as questões de 2025 e aplicados sem alteração às de 2024 (arquivos \texttt{congelamento\_teste\_2024.json} e \texttt{congelamento\_llm\_2024.json} do repositório).
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Parâmetros congelados do Jev e das linhas de base.}
+\begin{tabular}{ll}
+\toprule
+Método & Parâmetros \\
+\midrule
+Atratividade + pares (principal) & $\beta_1 = 0.17538$, $\beta_2 = 0.29052$ (padronizados); médias $(1.38207;\ 0.00000)$, desvios $(0.97183;\ 1.57860)$ \\
+Atratividade (proporção) & $\beta = 0.44246$ ($T = 2.2601$) \\
+Atratividade (convencimento) & $\beta = 0.43846$ ($T = 2.2807$) \\
+Oracle & taxa média de acerto $= 0.39507$ \\
+Média por área & proporção média de cada letra em 2025, por área \\
+Bradley-Terry & $\lambda = 0{,}01$; soma das forças igual a zero \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Parâmetros congelados do LLM.}
+\begin{tabular}{ll}
+\toprule
+Método & Parâmetros \\
+\midrule
+Método A (letras) & $T = 9.9344$ \\
+Método B, atratividade & $\beta = 0.49917$ \\
+Método B, pares & $\beta = 0.37430$ \\
+Método B, atratividade + pares & $\beta_1 = 0.18792$, $\beta_2 = 0.30998$ (padronizados) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Instruções do LLM}\label{ap:llm}
+
+Mensagens de sistema usadas com o \texttt{z-ai/glm-5.3-flash}. A mensagem do usuário continha a questão em texto (texto de apoio, texto principal e alternativas A--E) seguida, no método B, da pergunta, do foco e dos níveis ou das opções, com a mesma redação das perguntas feitas ao Jev (o caminho \texttt{alternativas.X} foi substituído por ``alternativa X'').
+
+\begin{itemize}[nosep]
+  \item Método A: Responda à questão de múltipla escolha com apenas uma letra (A, B, C, D ou E), sem explicação.
+  \item Método B, atratividade: Responda apenas com o número do nível (0, 1, 2, 3 ou 4), sem explicação.
+  \item Método B, pares: Responda apenas com a letra da alternativa escolhida, sem explicação.
+\end{itemize}

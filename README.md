@@ -84,3 +84,11 @@ Requisitos: Python 3.11 ou superior e o pacote `httpx`.
    ```
 
 Cada linha do arquivo de saída das chamadas guarda o corpo exato enviado, o SHA-256 desse corpo, o status HTTP e a resposta bruta. As análises podem ser refeitas a partir desses arquivos, sem novas chamadas à API. Uma nova chamada pode dar respostas diferentes se o serviço mudar.
+
+## Artigo
+
+O texto do artigo está em `ARTIGO/` (LaTeX, pronto para o Overleaf; arquivo principal `main.tex`). A figura de correlações e o apêndice com as perguntas e os parâmetros congelados são gerados a partir dos resultados e das definições usadas nas chamadas aos modelos:
+```
+python EXPERIMENTOS/scripts/figuras_artigo.py
+python EXPERIMENTOS/scripts/gerar_apendice.py
+```

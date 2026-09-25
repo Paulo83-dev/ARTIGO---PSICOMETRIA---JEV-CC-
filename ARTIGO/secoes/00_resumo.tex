@@ -1,15 +1,8 @@
 % 00_resumo: ver ROTEIRO.md
-% STATUS: a escrever
+% STATUS: primeira versão para revisão
 
-egin{abstract}
-
-% TODO: Problema e objetivo
-% TODO: Dados
-% TODO: Método
-% TODO: Resultados principais (H1--H4; pares; LLM)
-% TODO: Conclusão
-
-
-oindent	extbf{Palavras-chave:} ENEM; distratores; psicometria; modelos de linguagem; calibração; comparações entre pares.
-
+\begin{abstract}
+No ENEM, o percentual de participantes que escolhe cada alternativa de um item só é conhecido depois do pré-teste com estudantes, e é usado para identificar os distratores mais e menos atrativos. Investigamos se essa distribuição pode ser antecipada a partir apenas do texto do item. Em vez de pedir a resposta a um modelo de linguagem, perguntamos ao Jev, um modelo pós-treinado para devolver decisões estruturadas com probabilidades calibradas, pela atratividade de cada alternativa e pela preferência entre as alternativas tomadas duas a duas; as respostas foram agregadas pelos modelos de Bock e de Bradley-Terry e calibradas por temperatura. Usamos 234 questões textualmente autossuficientes do ENEM 2024 e 2025, com as proporções de escolha calculadas a partir dos microdados oficiais. Todas as escolhas de método foram feitas com as questões de 2025, e a configuração e as hipóteses foram registradas antes de um teste único com as de 2024. No teste, as quatro hipóteses pré-registradas foram sustentadas: sem acesso ao gabarito, o método teve erro de Brier menor que o de uma linha de base que conhece o gabarito (diferença $-0{,}010$; IC 95\% $[-0{,}016;\ -0{,}005]$), identificou o distrator mais escolhido em 46\% das questões (acaso: 25\%), e as comparações entre pares acrescentaram informação à atratividade isolada. Nos pares formados só por distratores, a alternativa preferida pelo modelo foi a mais escolhida em 70\% dos casos, e em 80\% quando a diferença real passava de 10 pontos percentuais. As perguntas que avaliam cada alternativa isoladamente convergiram para um único juízo de correção, e perguntas sobre mecanismos de atração não acrescentaram informação confiável. Um LLM generativo usado da forma habitual não superou a linha de base com o gabarito; com as mesmas perguntas, aproximou-se do Jev, a um custo 3,6 vezes maior. O desempenho foi alto em Linguagens e Ciências Humanas e baixo em Matemática e Ciências da Natureza. O método pode servir como triagem de distratores antes do pré-teste, sem substituí-lo.
 \end{abstract}
+
+\noindent\textbf{Palavras-chave:} ENEM; distratores; psicometria; modelos de linguagem; comparações entre pares; calibração.

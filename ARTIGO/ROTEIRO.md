@@ -1,6 +1,6 @@
 # Roteiro do artigo
 
-Status: **estrutura para revisão**. Cada seção será escrita depois, uma por vez, no arquivo `.tex` correspondente em `secoes/`.
+Status: **primeira versão de todas as seções escrita** (2026-09-25). Pendências: Figura do desenho experimental; enxugar o resumo conforme o periódico.
 
 **Título provisório:** Prevendo a atratividade de distratores do ENEM com um modelo de decisão calibrada: atratividade por alternativa e comparações entre pares
 
