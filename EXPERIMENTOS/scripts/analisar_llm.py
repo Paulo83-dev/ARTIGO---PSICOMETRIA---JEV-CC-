@@ -72,6 +72,18 @@ def carregar_llm(ids, caminho):
             uso["chamadas"] += 1
             uso["com_raciocinio"] += (x["tokens_raciocinio"] or 0) > 0
     uso["segundos_mediana_por_chamada"] = float(np.median(uso.pop("segundos")))
+    # Raciocínio: proporção de chamadas por área e concentração das probabilidades com e sem raciocínio
+    validos = [x for (rid, _, _), x in reg.items() if rid in ids]
+    rac = lambda x: (x["tokens_raciocinio"] or 0) > 0
+    area = lambda x: x["registro_id"].split("-")[1]
+    uso["proporcao_com_raciocinio_por_area"] = {
+        a: float(np.mean([rac(x) for x in validos if area(x) == a])) for a in sorted({area(x) for x in validos})}
+    uso["probabilidade_maxima_media"] = {
+        m: {"sem_raciocinio": float(np.mean([max(x["probabilidades"].values()) for x in validos
+                                             if x["metodo"] == m and not rac(x)])),
+            "com_raciocinio": float(np.mean([max(x["probabilidades"].values()) for x in validos
+                                             if x["metodo"] == m and rac(x)]))}
+        for m in ("A_letras", "B_q1b", "B_pares")}
     return logp, q1b, P1, uso
 
 

@@ -318,7 +318,27 @@
   "tokens_entrada": 1669404,
   "chamadas": 3600,
   "com_raciocinio": 603,
-  "segundos_mediana_por_chamada": 0.7
+  "segundos_mediana_por_chamada": 0.7,
+  "proporcao_com_raciocinio_por_area": {
+   "CH": 0.009523809523809525,
+   "CN": 0.19411764705882353,
+   "LC": 0.05476190476190476,
+   "MT": 0.7421052631578947
+  },
+  "probabilidade_maxima_media": {
+   "A_letras": {
+    "sem_raciocinio": 0.98064453859842,
+    "com_raciocinio": 0.9998317977928135
+   },
+   "B_q1b": {
+    "sem_raciocinio": 0.5966700860692674,
+    "com_raciocinio": 0.9853497420308936
+   },
+   "B_pares": {
+    "sem_raciocinio": 0.7785657821730515,
+    "com_raciocinio": 0.9869040019014301
+   }
+  }
  },
  "uso_jev": {
   "tokens_entrada": 1888094,

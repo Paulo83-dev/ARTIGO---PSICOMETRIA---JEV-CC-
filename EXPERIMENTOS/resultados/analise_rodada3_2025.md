@@ -25,8 +25,8 @@
 
 ## Regra de decisão: diferença de Brier em relação à q1b
 
-| Método | Diferença ↓ | IC 95% | Substitui a q1b? |
-|---|---|---|---|
-| pares_bradley_terry | -0.00082 | [-0.00283; +0.00116] | não |
-| pares_borda | +0.00278 | [-0.00092; +0.00658] | não |
-| q1b+pares_bradley_terry | -0.00130 | [-0.00245; -0.00013] | sim |
+| Método | Diferença ↓ | IC 95% | Substitui a q1b? | IC 98,33% (Bonferroni, 3 variantes) |
+|---|---|---|---|---|
+| pares_bradley_terry | -0.00082 | [-0.00283; +0.00116] | não | [-0.00322; +0.00156] |
+| pares_borda | +0.00278 | [-0.00092; +0.00658] | não | [-0.00155; +0.00727] |
+| q1b+pares_bradley_terry | -0.00130 | [-0.00245; -0.00013] | sim | [-0.00270; +0.00015] |

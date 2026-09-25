@@ -156,7 +156,19 @@ def main():
     modelo_final = LogitSimples().ajustar(F_final, Y)
 
     resultados = {nome: metricas(P, Y, gab, area)[0] for nome, P in metodos.items()}
+    # Diferença de Brier em relação à q1b, com IC 95% por bootstrap pareado por grupos
+    from avaliar_teste import bootstrap_grupos
+    brier_q1b = ((metodos["q1b"] - Y) ** 2).sum(axis=1)
+    comparacoes = {}
+    for nome, P in metodos.items():
+        if nome == "q1b":
+            continue
+        d = ((P - Y) ** 2).sum(axis=1) - brier_q1b
+        bs = bootstrap_grupos(d, grupos, 5000, SEMENTE)
+        comparacoes[nome] = {"diferenca_brier": float(d.mean()),
+                             "ic95": [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))]}
     saida = {
+        "comparacao_com_q1b": comparacoes,
         "ano": args.ano, "n_itens": n,
         "diagnostico_caracteristicas": diagnostico,
         "resultados_fora_da_dobra": resultados,
@@ -188,6 +200,10 @@ def markdown(s):
                        ("corr_q1b", "Correlação com q1b", None, "{:+.2f}")], primeira="Pergunta")
     L += ["", "## Previsão fora da dobra (5 dobras)", ""]
     L += tabela(sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]), COLUNAS_METRICAS)
+    L += ["", "## Diferença de Brier em relação à q1b (IC 95%, bootstrap por grupos)", "",
+          "| Método | Diferença ↓ | IC 95% |", "|---|---|---|"]
+    for nome, c in sorted(s["comparacao_com_q1b"].items(), key=lambda kv: kv[1]["diferenca_brier"]):
+        L.append(f"| {nome} | {c['diferenca_brier']:+.5f} | [{c['ic95'][0]:+.5f}; {c['ic95'][1]:+.5f}] |")
     L += ["", "## Seleção de características",
           "", "Escolhas em cada dobra externa (só com o treino): "
           + "; ".join(", ".join(e) or "nenhuma" for e in s["selecao_em_cada_dobra_externa"]),

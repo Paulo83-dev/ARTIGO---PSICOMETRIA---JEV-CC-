@@ -9,22 +9,7 @@
 
 O acervo final tem 234 questões: 114 de 2025 (66 excluídas por elemento visual e 5 anuladas) e 120 de 2024 (64 excluídas por elemento visual e 1 anulada). A Tabela~\ref{tab:itens} mostra a distribuição por área. Quinze questões são de língua estrangeira (seis de inglês e nove de espanhol). Para cada questão, o conteúdo apresentado aos modelos é um objeto com a área, o texto de apoio compartilhado (presente em cinco questões de 2025), o texto principal e as cinco alternativas; esse objeto não contém o gabarito nem nenhuma informação sobre as respostas.
 
-\begin{table}[ht]
-\centering
-\caption{Questões textualmente autossuficientes por área e edição.}\label{tab:itens}
-\begin{tabular}{lcc}
-\toprule
-Área & 2025 (desenvolvimento) & 2024 (teste) \\
-\midrule
-Linguagens (LC)            & 37 & 42 \\
-Ciências Humanas (CH)      & 40 & 42 \\
-Ciências da Natureza (CN)  & 19 & 17 \\
-Matemática (MT)            & 18 & 19 \\
-\midrule
-Total                      & 114 & 120 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_itens}
 
 \paragraph{Escolhas observadas.} As proporções de escolha foram calculadas a partir dos microdados oficiais de cada edição \citep{inep2025microdados2024,inep2026microdados2025}. Cada questão foi associada, pelo código oficial do item, às posições que ocupa nas diferentes cores de caderno, e foram considerados os participantes presentes nas provas regulares impressas. Para a alternativa $k$ da questão $i$, a proporção observada é
 \begin{equation}

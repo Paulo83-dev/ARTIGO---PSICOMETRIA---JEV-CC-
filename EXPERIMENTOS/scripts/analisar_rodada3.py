@@ -137,7 +137,10 @@ def main():
         d = brier[nome] - brier["q1b"]
         bs = bootstrap_grupos(d, grupos, 5000, 2025)
         ic = [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))]
-        comparacoes[nome] = {"diferenca_brier": float(d.mean()), "ic95": ic, "substitui_q1b": ic[1] < 0}
+        # IC com correção de Bonferroni para as 3 variantes de pares (98,33%), registrado como ressalva
+        ic_bonf = [float(np.percentile(bs, 100 * 0.05 / 3 / 2)), float(np.percentile(bs, 100 * (1 - 0.05 / 3 / 2)))]
+        comparacoes[nome] = {"diferenca_brier": float(d.mean()), "ic95": ic, "substitui_q1b": ic[1] < 0,
+                             "ic_bonferroni_3": ic_bonf}
 
     saida = {
         "ano": args.ano, "n_itens": n,
@@ -180,10 +183,12 @@ def markdown(s):
     L += ["", "## Previsão fora da dobra (5 dobras)", ""]
     L += tabela(sorted(s["resultados_fora_da_dobra"].items(), key=lambda kv: kv[1]["brier"]), COLUNAS_METRICAS)
     L += ["", "## Regra de decisão: diferença de Brier em relação à q1b", "",
-          "| Método | Diferença ↓ | IC 95% | Substitui a q1b? |", "|---|---|---|---|"]
+          "| Método | Diferença ↓ | IC 95% | Substitui a q1b? | IC 98,33% (Bonferroni, 3 variantes) |",
+          "|---|---|---|---|---|"]
     for nome, c in s["comparacao_com_q1b"].items():
         L.append(f"| {nome} | {c['diferenca_brier']:+.5f} | [{c['ic95'][0]:+.5f}; {c['ic95'][1]:+.5f}] | "
-                 f"{'sim' if c['substitui_q1b'] else 'não'} |")
+                 f"{'sim' if c['substitui_q1b'] else 'não'} | "
+                 f"[{c['ic_bonferroni_3'][0]:+.5f}; {c['ic_bonferroni_3'][1]:+.5f}] |")
     return "\n".join(L) + "\n"
 
 

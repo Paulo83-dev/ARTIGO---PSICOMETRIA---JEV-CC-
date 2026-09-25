@@ -120,7 +120,11 @@
     -0.002832300135318579,
     0.001163515777272133
    ],
-   "substitui_q1b": false
+   "substitui_q1b": false,
+   "ic_bonferroni_3": [
+    -0.0032243328911311744,
+    0.0015589803517082191
+   ]
   },
   "pares_borda": {
    "diferenca_brier": 0.0027764376822684376,
@@ -128,7 +132,11 @@
     -0.0009229191990555756,
     0.006578662544676562
    ],
-   "substitui_q1b": false
+   "substitui_q1b": false,
+   "ic_bonferroni_3": [
+    -0.0015458901077175572,
+    0.007274165998953758
+   ]
   },
   "q1b+pares_bradley_terry": {
    "diferenca_brier": -0.0013026675652280779,
@@ -136,7 +144,11 @@
     -0.0024540701010113022,
     -0.0001340763720207429
    ],
-   "substitui_q1b": true
+   "substitui_q1b": true,
+   "ic_bonferroni_3": [
+    -0.0026980831132017527,
+    0.0001497519932328357
+   ]
   }
  },
  "parametros_ajustados_em_todo_o_ano": {

@@ -10,27 +10,7 @@ Nas tabelas, \menor{} indica que menor é melhor e \maior{} que maior é melhor;
 
 A Tabela~\ref{tab:desenvolvimento} resume os principais métodos avaliados no desenvolvimento, com previsões fora da dobra. Os relatórios completos das três rodadas estão no repositório.
 
-\begin{table}[ht]
-\centering
-\caption{Desenvolvimento em 2025: previsões fora da dobra (114 questões, 5 dobras). Análise descritiva.}\label{tab:desenvolvimento}
-\small
-\begin{tabular}{lcccc}
-\toprule
-Método & Brier \menor & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior \\
-\midrule
-Atratividade + pares (combinação)      & \textbf{0,0391} & 0,383 & 0,447 & \textbf{0,837} \\
-Pares (Bradley-Terry)                  & 0,0396 & \textbf{0,386} & \textbf{0,452} & 0,831 \\
-Atratividade (proporção)               & 0,0404 & 0,345 & 0,417 & 0,830 \\
-Combinação das nove perguntas (rodada 1) & 0,0404 & 0,261 & 0,368 & 0,815 \\
-Atratividade (convencimento)           & 0,0413 & 0,294 & 0,421 & 0,826 \\
-Modelo em dois níveis                  & 0,0416 & 0,334 & 0,412 & 0,804 \\
-\midrule
-Oracle (usa o gabarito)                & 0,0480 & ---   & 0,250 & 0,517 \\
-Uniforme                               & 0,0953 & ---   & 0,250 & 0,500 \\
-Média por área                         & 0,1002 & 0,077 & 0,281 & 0,471 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_desenvolvimento}
 
 \paragraph{Rodada 1: atratividade por alternativa.} Entre as nove perguntas, a de atratividade formulada em termos de \emph{quantos participantes escolheriam} teve o menor Brier (0,0404), com temperatura ajustada de $T \approx 2{,}26$. Mesmo sem ver o gabarito, ela teve erro menor que a Oracle (0,0480), identificou o distrator mais escolhido em 41,7\% das questões (acaso: 25\%) e distinguiu os distratores não funcionais com AUC de 0,83. Combinar as nove perguntas não melhorou o resultado (Brier 0,0404), e um modelo em dois níveis, que separa a probabilidade de acerto da divisão entre os distratores \citep{bolt2012}, também não (0,0416).
 
@@ -42,50 +22,19 @@ A razão aparece na Figura~\ref{fig:correlacoes}: dentro de cada questão, as pe
 \caption{Correlação entre as perguntas da rodada 1, calculada dentro de cada questão (escores centrados pela média da questão), em 2025.}\label{fig:correlacoes}
 \end{figure}
 
-\paragraph{Rodada 2: mecanismos de atração.} Nenhuma das nove perguntas sobre mecanismos de atração dos distratores, somada à atratividade, reduziu o Brier de forma confiável. A maior redução, com a pergunta sobre combinação incorreta de informações, foi de $-0{,}0014$ (IC 95\% $[-0{,}0033;\ 0{,}0004]$), e o procedimento de seleção de até duas perguntas, avaliado por validação cruzada aninhada, reduziu o Brier em $-0{,}0010$ (IC 95\% $[-0{,}0034;\ 0{,}0016]$). As perguntas funcionaram no sentido esperado quando havia um sentido claro: alternativas julgadas fora do tema foram menos escolhidas (Spearman bruto de $-0{,}23$ entre distratores). Perguntas sobre oposição, combinação incorreta, generalização excessiva e conhecimento prévio no lugar do texto, porém, praticamente não ordenaram os distratores (Spearman entre $-0{,}05$ e $+0{,}08$).
+\paragraph{Rodada 2: mecanismos de atração.} Nenhuma das nove perguntas sobre mecanismos de atração dos distratores, somada à atratividade, reduziu o Brier de forma confiável. A maior redução, com a pergunta sobre combinação incorreta de informações, foi de $-0{,}0014$ (IC 95\% $[-0{,}0032;\ 0{,}0004]$), e o procedimento de seleção de até duas perguntas, avaliado por validação cruzada aninhada, reduziu o Brier em $-0{,}0010$ (IC 95\% $[-0{,}0034;\ 0{,}0015]$). As perguntas funcionaram no sentido esperado quando havia um sentido claro: alternativas julgadas fora do tema foram menos escolhidas (Spearman bruto de $-0{,}23$ entre distratores). Perguntas sobre oposição, combinação incorreta, generalização excessiva e conhecimento prévio no lugar do texto, porém, praticamente não ordenaram os distratores (Spearman entre $-0{,}05$ e $+0{,}08$).
 
-\paragraph{Rodada 3: comparações entre pares.} As comparações entre pares mudaram o quadro. Nos pares formados só por distratores, a alternativa preferida pelo Jev foi a mais escolhida pelos participantes em 67,1\% dos casos (681 pares), e em 74,8\% quando a diferença real entre os dois distratores passava de 10 pontos percentuais. As decisões foram as mesmas nas duas ordens de apresentação em 96\% dos pares, e o Jev escolheu a alternativa apresentada primeiro em 48,8\% das vezes, sem viés de posição apreciável. Combinadas com a atratividade (Equação~\eqref{eq:combinacao}), as forças dos pares reduziram o Brier para 0,0391 e melhoraram todas as métricas de distratores (Tabela~\ref{tab:desenvolvimento}). A diferença em relação à atratividade isolada foi de $-0{,}0013$ (IC 95\% $[-0{,}0025;\ -0{,}0001]$), o que, pela regra definida antes da rodada, levou a combinação a método principal. Como três variantes de pares foram avaliadas, registramos no congelamento que, com correção de Bonferroni, o intervalo passaria a incluir zero (IC 98,3\% $[-0{,}0027;\ 0{,}0002]$); a hipótese H4 verifica esse ganho em 2024.
+\paragraph{Rodada 3: comparações entre pares.} As comparações entre pares mudaram o quadro. Nos pares formados só por distratores, a alternativa preferida pelo Jev foi a mais escolhida pelos participantes em 67,1\% dos casos (681 pares), e em 74,8\% quando a diferença real entre os dois distratores passava de 10 pontos percentuais. As decisões foram as mesmas nas duas ordens de apresentação em 96\% dos pares, e o Jev escolheu a alternativa apresentada primeiro em 48,8\% das vezes, sem viés de posição apreciável. Combinadas com a atratividade (Equação~\eqref{eq:combinacao}), as forças dos pares reduziram o Brier para 0,0391 e melhoraram todas as métricas de distratores (Tabela~\ref{tab:desenvolvimento}). A diferença em relação à atratividade isolada foi de $-0{,}0013$ (IC 95\% $[-0{,}0025;\ -0{,}0001]$), o que, pela regra definida antes da rodada, levou a combinação a método principal. Como três variantes de pares foram avaliadas, registramos no congelamento que, com correção de Bonferroni, o intervalo passaria a incluir zero (IC 98,3\% $[-0{,}0027;\ 0{,}0001]$); a hipótese H4 verifica esse ganho em 2024.
 
 \subsection{Teste em 2024}\label{sec:res-teste}
 
 As quatro hipóteses pré-registradas foram sustentadas (Tabela~\ref{tab:hipoteses}). Sem acesso ao gabarito, o método principal teve Brier menor que o da Oracle, que conhece a alternativa correta (H1); identificou o distrator mais escolhido em 45,8\% das questões (H3); e superou a atratividade isolada com margem maior que no desenvolvimento (H4), com intervalo distante de zero, o que afasta a preocupação com a multiplicidade registrada no congelamento.
 
-\begin{table}[ht]
-\centering
-\caption{Teste em 2024: hipóteses pré-registradas (120 questões). Diferenças negativas de Brier favorecem o método principal.}\label{tab:hipoteses}
-\small
-\begin{tabular}{llcc}
-\toprule
-& Hipótese & Estimativa & IC 95\% \\
-\midrule
-H1 & Brier: principal $-$ Oracle (usa o gabarito) & $-0{,}0101$ & $[-0{,}0157;\ -0{,}0046]$ \\
-H2 & Brier: principal $-$ uniforme                 & $-0{,}0604$ & $[-0{,}0766;\ -0{,}0442]$ \\
-H3 & Acerto do principal distrator                 & $0{,}458$   & $[0{,}367;\ 0{,}550]$ \\
-H4 & Brier: principal $-$ atratividade isolada     & $-0{,}0033$ & $[-0{,}0050;\ -0{,}0018]$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_hipoteses}
 
 A Tabela~\ref{tab:teste} mostra as métricas descritivas. O método principal teve o melhor desempenho em Brier, MAE, Jensen--Shannon, Brier entre distratores, principal distrator e AUC. A atratividade isolada, por sua vez, teve a melhor ordenação das alternativas (Spearman de 0,641 nas cinco alternativas e de 0,468 entre os distratores, contra 0,628 e 0,443 da combinação): o ganho das comparações entre pares aparece nas proporções e na identificação do principal distrator, mas não na ordenação completa.
 
-\begin{table}[ht]
-\centering
-\caption{Teste em 2024: métricas descritivas (120 questões).}\label{tab:teste}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccccc}
-\toprule
-Método & Brier \menor & MAE \menor & Spearman \maior & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior \\
-\midrule
-Atratividade + pares (principal) & \textbf{0,0420} & \textbf{0,0665} & 0,628 & 0,443 & \textbf{0,458} & \textbf{0,747} \\
-Atratividade (proporção)         & 0,0453 & 0,0695 & \textbf{0,641} & \textbf{0,468} & 0,438 & 0,723 \\
-Atratividade (convencimento)     & 0,0460 & 0,0703 & 0,613 & 0,412 & 0,417 & 0,728 \\
-Oracle (usa o gabarito)          & 0,0521 & 0,0778 & 0,548 & ---   & 0,250 & 0,500 \\
-Média por área de 2025           & 0,1014 & 0,1038 & 0,129 & 0,140 & 0,317 & 0,557 \\
-Uniforme                         & 0,1024 & 0,1057 & ---   & ---   & 0,250 & 0,500 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_teste}
 
 \subsection{Distratores e comparações entre pares}\label{sec:res-pares}
 
@@ -95,62 +44,14 @@ Em 2024, a alternativa preferida pelo Jev nos pares formados só por distratores
 
 A Tabela~\ref{tab:areas} mostra o Brier por área (análise descritiva; CN e MT têm menos de 20 questões). O Brier bruto não é comparável entre áreas, porque depende de quão espalhadas são as escolhas reais: em MT e CN, a taxa média de acerto foi de 26\% e 30\%, e as escolhas ficaram próximas de uma distribuição uniforme, que por isso já erra pouco nessas áreas. Para apresentar os resultados por área, usamos também o ganho sobre a uniforme, $1 - B/B_{\text{uniforme}}$. Por essa medida, o método principal reduziu o erro da uniforme em 69\% em LC e 62\% em CH, mas só em 12\% em MT, e foi pior que ela em CN ($-11\%$), área em que também a Oracle superou o método principal. Em MT, a média por área de 2025 teve o menor Brier.
 
-\begin{table}[ht]
-\centering
-\caption{Teste em 2024: Brier por área e ganho do método principal sobre a uniforme (análise descritiva).}\label{tab:areas}
-\small
-\begin{tabular}{lcccc}
-\toprule
-Método & LC (42) & CH (42) & CN (17) & MT (19) \\
-\midrule
-Atratividade + pares (principal) & \textbf{0,0486} & \textbf{0,0393} & 0,0462 & 0,0295 \\
-Atratividade (proporção)         & 0,0514 & 0,0429 & 0,0523 & 0,0309 \\
-Oracle (usa o gabarito)          & 0,0643 & 0,0440 & 0,0429 & 0,0515 \\
-Média por área de 2025           & 0,1567 & 0,1036 & 0,0445 & \textbf{0,0255} \\
-Uniforme                         & 0,1563 & 0,1041 & \textbf{0,0418} & 0,0336 \\
-\midrule
-Ganho do principal sobre a uniforme \maior & 69\% & 62\% & $-11\%$ & 12\% \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_areas}
 
 \subsection{Comparação com o LLM}\label{sec:res-llm}
 
 A comparação com o LLM generativo foi acrescentada depois do teste principal e segue o mesmo protocolo de congelamento; seus resultados são descritivos. A Tabela~\ref{tab:llm} mostra as quatro comparações pré-especificadas. O uso padrão do LLM, pelas probabilidades das letras (método A), teve erro claramente maior que o do Jev (C1) e não superou a Oracle (C4), como em \citet{saeuberli2025}. Quando recebeu as mesmas perguntas de atratividade e de pares (método B), o LLM ficou próximo do Jev: a diferença em favor do Jev não foi estatisticamente distinguível de zero, nem na combinação (C2) nem na atratividade isolada (C3), embora nesta o intervalo quase exclua o zero.
 
-\begin{table}[ht]
-\centering
-\caption{Comparação com o LLM em 2024 (análise acrescentada depois do teste principal). Diferenças de Brier, $a - b$; valores negativos favorecem $a$.}\label{tab:llm}
-\small
-\begin{tabular}{llcc}
-\toprule
-& Comparação ($a$ $\times$ $b$) & Diferença & IC 95\% \\
-\midrule
-C1 & Jev, principal $\times$ LLM, método A (letras)            & $-0{,}0109$ & $[-0{,}0166;\ -0{,}0055]$ \\
-C2 & Jev, principal $\times$ LLM, método B (atratividade + pares) & $-0{,}0025$ & $[-0{,}0067;\ 0{,}0018]$ \\
-C3 & Jev, atratividade $\times$ LLM, atratividade (método B)   & $-0{,}0050$ & $[-0{,}0104;\ 0{,}0006]$ \\
-C4 & LLM, método A $\times$ Oracle (usa o gabarito)          & $0{,}0008$  & $[-0{,}0029;\ 0{,}0042]$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_llm}
 
 A Tabela~\ref{tab:llm-metricas} compara os métodos nas demais métricas e no custo. Em cada métrica, o melhor valor foi de uma das configurações do Jev, e o custo por questão do Jev foi 3,6 vezes menor (US\$ 0,00066 contra US\$ 0,00241, considerando as duas requisições do Jev e as 30 chamadas do LLM por questão). O LLM raciocinou antes de responder em 17\% das chamadas, concentradas em MT (74\% das chamadas dessa área) e CN (19\%). Nessas chamadas, as probabilidades se concentraram numa única opção: na pergunta de atratividade, a probabilidade do nível mais provável foi, em média, de 0,60 sem raciocínio e de 0,99 com raciocínio. Uma chamada precisou ser reenviada por ter esgotado o limite de tokens no raciocínio. Por área, o LLM foi ligeiramente melhor que o Jev em CH (Brier 0,0376 contra 0,0393) e muito pior em MT (0,0450 contra 0,0295). Nos pares só de distratores, o LLM acertou 65,9\% (74,6\% com diferença acima de 10 pontos), contra 69,8\% (80,3\%) do Jev. No desenvolvimento, essa ordem tinha sido inversa nas métricas de distratores, o que indica que nenhum dos dois modelos domina de forma consistente na ordenação dos distratores.
 
-\begin{table}[ht]
-\centering
-\caption{Jev e LLM em 2024: métricas e custo (análise descritiva).}\label{tab:llm-metricas}
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccccc}
-\toprule
-Método & Brier \menor & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior & Custo/questão (US\$) \menor \\
-\midrule
-Jev: atratividade + pares       & \textbf{0,0420} & 0,443 & \textbf{0,458} & \textbf{0,747} & \multirow{2}{*}{\textbf{0,00066}} \\
-Jev: atratividade               & 0,0453 & \textbf{0,468} & 0,438 & 0,723 & \\
-LLM B: atratividade + pares     & 0,0444 & 0,415 & 0,408 & 0,744 & \multirow{4}{*}{0,00241} \\
-LLM B: pares                    & 0,0459 & 0,438 & 0,442 & 0,730 & \\
-LLM B: atratividade             & 0,0502 & 0,322 & 0,317 & 0,710 & \\
-LLM A: letras                   & 0,0529 & 0,215 & 0,408 & 0,591 & \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{tabelas/tab_llm_metricas}

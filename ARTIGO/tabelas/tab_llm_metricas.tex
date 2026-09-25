@@ -1,0 +1,19 @@
+% GERADO AUTOMATICAMENTE por EXPERIMENTOS/scripts/gerar_tabelas.py; não editar à mão.
+\begin{table}[ht]
+\centering
+\caption{Jev e LLM em 2024: métricas e custo por questão (análise descritiva). O custo do Jev inclui as duas requisições; o do LLM, as 30 chamadas.}\label{tab:llm-metricas}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+Método & Brier \menor & Spearman distr. \maior & Principal distrator \maior & AUC $<$5\% \maior & Custo/questão (US\$) \menor \\
+\midrule
+Jev: atratividade + pares & $\mathbf{0{,}0420}$ & $0{,}443$ & $\mathbf{0{,}458}$ & $\mathbf{0{,}746}$ & $\mathbf{0{,}00066}$ \\
+Jev: atratividade & $0{,}0453$ & $\mathbf{0{,}468}$ & $0{,}438$ & $0{,}723$ & $\mathbf{0{,}00066}$ \\
+LLM B: atratividade + pares & $0{,}0444$ & $0{,}415$ & $0{,}408$ & $0{,}744$ & $0{,}00241$ \\
+LLM B: pares & $0{,}0459$ & $0{,}438$ & $0{,}442$ & $0{,}730$ & $0{,}00241$ \\
+LLM B: atratividade & $0{,}0502$ & $0{,}322$ & $0{,}317$ & $0{,}710$ & $0{,}00241$ \\
+LLM A: letras & $0{,}0529$ & $0{,}215$ & $0{,}408$ & $0{,}591$ & $0{,}00241$ \\
+\bottomrule
+\end{tabular}
+\end{table}
