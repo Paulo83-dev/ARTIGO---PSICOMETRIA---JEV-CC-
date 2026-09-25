@@ -1,6 +1,6 @@
 # Roteiro do artigo
 
-Status: **primeira versão de todas as seções escrita** (2026-09-25). Pendências: Figura do desenho experimental; enxugar o resumo conforme o periódico.
+Status: **primeira versão de todas as seções escrita** (2026-09-25). Pendências: enxugar o resumo conforme o periódico.
 
 **Título provisório:** Prevendo a atratividade de distratores do ENEM com um modelo de decisão calibrada: atratividade por alternativa e comparações entre pares
 

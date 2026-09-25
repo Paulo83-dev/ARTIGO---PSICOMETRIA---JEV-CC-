@@ -76,8 +76,10 @@ A regra de decisão da rodada 3 estabelecia que a combinação com os pares subs
 
 \begin{figure}[ht]
 \centering
-\fbox{\parbox{0.9\linewidth}{\centering\small [Figura a produzir: 2025 (rodadas 1--3, validação cruzada) $\rightarrow$ congelamento registrado $\rightarrow$ teste único em 2024 $\rightarrow$ comparação com o LLM, com congelamento próprio.]}}
-\caption{Desenho experimental.}\label{fig:desenho}
+\begin{adjustbox}{max width=\linewidth}
+\input{figuras/desenho}
+\end{adjustbox}
+\caption{Desenho experimental. Os modelos recebem apenas o texto da questão e das alternativas; a distribuição real das escolhas entra em 2025 só para ajustar e em 2024 só para avaliar. A configuração passa de 2025 para 2024 somente pelo congelamento, sem nenhum retorno.}\label{fig:desenho}
 \end{figure}
 
 \subsection{Linhas de base}\label{sec:linhasbase}

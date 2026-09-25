@@ -1,0 +1,50 @@
+% Figura do desenho experimental (TikZ). Incluída em secoes/03_metodo.tex com \input{figuras/desenho}.
+\begin{tikzpicture}[
+    font=\small,
+    >={Stealth[length=2.2mm]},
+    etapa/.style={draw=black!55, fill=black!4, rounded corners=2pt, align=center,
+                  text width=4.9cm, minimum height=1.05cm, inner sep=4pt},
+    dados/.style={draw=black!55, dashed, rounded corners=2pt, align=center,
+                  text width=4.9cm, inner sep=4pt, font=\footnotesize},
+    congela/.style={draw=azul, fill=azul!12, very thick, rounded corners=2pt, align=center,
+                    text width=3.1cm, inner sep=5pt},
+    titulo/.style={font=\small\bfseries, align=center},
+    seta/.style={->, thick, black!70},
+    setaazul/.style={->, very thick, azul},
+  ]
+  % ---------------------------------------------------------------- 2025
+  \node[titulo] at (2.6, 1.15) {Desenvolvimento\\ENEM 2025 (114 questões)};
+  \node[etapa] (L1) at (2.6, 0)    {Texto da questão e das alternativas\\(sem gabarito)};
+  \node[etapa] (L2) at (2.6, -1.7) {Jev: rodadas 1, 2 e 3\\Score por alternativa e pares};
+  \node[etapa] (L3) at (2.6, -3.4) {Validação cruzada em 5 dobras agrupadas: ajuste e escolha do método};
+  \node[dados] (DL) at (2.6, -5.1) {Distribuição real A--E (microdados),\\usada só para ajustar};
+  \draw[seta] (L1) -- (L2);
+  \draw[seta] (L2) -- (L3);
+  \draw[seta] (DL) -- (L3);
+
+  % ---------------------------------------------------------- congelamento
+  \node[congela] (F) at (7.8, -3.4) {\textbf{Congelamento}\\commit com data e hora:\\método, parâmetros\\e hipóteses H1--H4};
+
+  % ---------------------------------------------------------------- 2024
+  \node[titulo] at (13.0, 1.15) {Teste\\ENEM 2024 (120 questões)};
+  \node[etapa] (R1) at (13.0, 0)    {Texto da questão e das alternativas\\(sem gabarito)};
+  \node[etapa] (R2) at (13.0, -1.7) {Jev: as mesmas perguntas\\(rodadas 1 e 3)};
+  \node[etapa] (R3) at (13.0, -3.4) {Previsão com os parâmetros congelados (nenhum ajuste)};
+  \node[etapa] (R4) at (13.0, -5.1) {Avaliação única das hipóteses\\H1--H4};
+  \node[dados] (DR) at (13.0, -6.8) {Distribuição real A--E (microdados),\\usada só para avaliar};
+  \draw[seta] (R1) -- (R2);
+  \draw[seta] (R2) -- (R3);
+  \draw[seta] (R3) -- (R4);
+  \draw[seta] (DR) -- (R4);
+
+  % Sentido único: de 2025 para 2024, passando pelo congelamento
+  \draw[setaazul] (L3) -- (F);
+  \draw[setaazul] (F) -- (R3);
+
+  % ------------------------------------------------------ comparação com LLM
+  \draw[black!35, dashed] (0.15, -7.95) -- (15.45, -7.95);
+  \node[draw=black!40, rounded corners=2pt, align=center, text width=15cm, inner sep=5pt,
+        font=\footnotesize] at (7.8, -8.75)
+    {\textbf{Comparação com um LLM (GLM)}: as mesmas questões e o mesmo esquema --- ajuste em 2025,
+     congelamento próprio e teste único em 2024 (comparações C1--C4).};
+\end{tikzpicture}
