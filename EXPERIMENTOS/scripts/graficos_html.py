@@ -1,5 +1,6 @@
 """Acrescenta a cada questão elegível das páginas de revisão (VIZUALIZAÇÂO HTML/) um gráfico com a
-proporção real de escolha de cada alternativa e a previsão do método principal (atratividade + pares).
+proporção real de escolha de cada alternativa e a previsão do método principal (atratividade + pares), e um
+seletor para ordenar as questões pelo Brier, pelo erro na taxa de acerto ou pela taxa de acerto real.
 
 - 2025: previsões fora da dobra (validação cruzada), de EXPERIMENTOS/resultados/analise_rodada3_2025.json;
 - 2024: previsões com os parâmetros congelados (teste), de EXPERIMENTOS/resultados/teste_2024.json.
@@ -83,6 +84,48 @@ def bloco(real, prev, gabarito, ano):
             f'</p></section>{FIM}')
 
 
+ORD_INICIO, ORD_FIM = "<!-- ordenar:inicio -->", "<!-- ordenar:fim -->"
+ORD_JS_INICIO, ORD_JS_FIM = "<!-- ordenar:script:inicio -->", "<!-- ordenar:script:fim -->"
+ORDENADOR = (ORD_INICIO + '<select id="ordenar" aria-label="Ordenar questões">'
+             '<option value="ordem:asc">Ordem da prova</option>'
+             '<option value="brier:asc">Brier: melhores previsões primeiro</option>'
+             '<option value="brier:desc">Brier: piores previsões primeiro</option>'
+             '<option value="erro:desc">Maior erro na taxa de acerto primeiro</option>'
+             '<option value="real:desc">Mais fáceis primeiro (acerto real)</option>'
+             '<option value="real:asc">Mais difíceis primeiro (acerto real)</option>'
+             '</select>' + ORD_FIM)
+# Reordena os <article> dentro do elemento pai; questões sem previsão (excluídas) vão para o fim.
+SCRIPT_ORDENAR = ORD_JS_INICIO + """<script>
+(() => {
+  const sel = document.getElementById('ordenar');
+  const itens = [...document.querySelectorAll('.item')];
+  itens.forEach((it, i) => { it.dataset.ordem = i; });
+  const pai = itens[0].parentNode;
+  const campos = {brier: 'brier', erro: 'erroAcerto', real: 'acertoReal'};
+  const valor = (it, campo) => campo === 'ordem' ? +it.dataset.ordem
+    : (it.dataset[campos[campo]] === undefined ? null : +it.dataset[campos[campo]]);
+  sel.addEventListener('change', () => {
+    const [campo, sentido] = sel.value.split(':');
+    const ordenados = [...itens].sort((a, b) => {
+      const x = valor(a, campo), y = valor(b, campo);
+      if (x === null || y === null) return (x === null) - (y === null) || a.dataset.ordem - b.dataset.ordem;
+      return (sentido === 'desc' ? y - x : x - y) || a.dataset.ordem - b.dataset.ordem;
+    });
+    ordenados.forEach(it => pai.appendChild(it));
+  });
+})();
+</script>""" + ORD_JS_FIM
+
+
+def atributos(artigo, real, prev, gabarito):
+    """Grava no <article> os valores usados pelo ordenador (substitui os de uma execução anterior)."""
+    artigo = re.sub(r' data-(?:brier|acerto-real|acerto-prev|erro-acerto)="[^"]*"', "", artigo)
+    brier = sum((prev[k] - real[k]) ** 2 for k in LETRAS)
+    attrs = (f' data-brier="{brier:.6f}" data-acerto-real="{real[gabarito]:.6f}" '
+             f'data-acerto-prev="{prev[gabarito]:.6f}" data-erro-acerto="{abs(prev[gabarito] - real[gabarito]):.6f}"')
+    return artigo.replace(">", attrs + ">", 1)
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     acervo = json.loads((RAIZ / "exportacao_acervo/acervo_questoes_aprovadas_enem_2024_2025.json").read_text(encoding="utf-8"))
@@ -96,9 +139,14 @@ def main():
     for ano, prev in previsoes.items():
         caminho = PASTA / f"REVISAO_INTEGRAL_ACERVO_{ano}.html"
         html = caminho.read_text(encoding="utf-8")
-        html = re.sub(re.escape(INICIO) + ".*?" + re.escape(FIM), "", html, flags=re.S)  # remove versão anterior
-        html = re.sub(r"\n?" + re.escape(CSS_INICIO) + ".*?" + re.escape(CSS_FIM), "", html, flags=re.S)
+        # remove a versão anterior junto com a quebra de linha acrescentada, para que rodar de novo não mude nada
+        html = re.sub(re.escape(INICIO) + ".*?" + re.escape(FIM) + "\n", "", html, flags=re.S)
+        html = re.sub("\n" + re.escape(CSS_INICIO) + ".*?" + re.escape(CSS_FIM) + "\n", "", html, flags=re.S)
         html = html.replace("</style>", "\n" + CSS + "\n</style>", 1)
+        for ini, fim in ((ORD_INICIO, ORD_FIM), (ORD_JS_INICIO, ORD_JS_FIM)):
+            html = re.sub(re.escape(ini) + ".*?" + re.escape(fim), "", html, flags=re.S)
+        html = html.replace('<span id="shown">', ORDENADOR + '<span id="shown">', 1)
+        html = html.replace("</body>", SCRIPT_ORDENAR + "</body>", 1)
 
         feitos = 0
 
@@ -111,6 +159,7 @@ def main():
             q = questoes[rid]
             real = q["respostas_observadas"]["proporcoes_validas"]
             feitos += 1
+            artigo = atributos(artigo, real, prev[rid], q["gabarito"])
             # depois da lista de alternativas (<ul> em 2024, <ol> dentro de <section> em 2025), antes dos detalhes
             return re.sub(r"</(?:ul|ol)>(?:</section>)?\n",
                           lambda f: f.group(0) + bloco(real, prev[rid], q["gabarito"], ano) + "\n", artigo, count=1)

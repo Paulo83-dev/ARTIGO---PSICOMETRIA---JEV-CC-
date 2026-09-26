@@ -97,7 +97,7 @@ python EXPERIMENTOS/scripts/gerar_apendice.py
 
 ## Páginas de revisão
 
-Cada questão elegível das páginas em `VIZUALIZAÇÂO HTML/` traz um gráfico com a proporção real de escolha de cada alternativa e a previsão do método principal (em 2025, previsão fora da dobra; em 2024, previsão do teste com os parâmetros congelados). Os gráficos são gerados a partir dos resultados salvos:
+Cada questão elegível das páginas em `VIZUALIZAÇÂO HTML/` traz um gráfico com a proporção real de escolha de cada alternativa e a previsão do método principal (em 2025, previsão fora da dobra; em 2024, previsão do teste com os parâmetros congelados), e um seletor permite ordenar as questões pelo Brier, pelo erro na taxa de acerto ou pela taxa de acerto real. Os gráficos e o seletor são gerados a partir dos resultados salvos:
 ```
 python EXPERIMENTOS/scripts/graficos_html.py
 ```
