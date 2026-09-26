@@ -1,0 +1,21 @@
+{
+ "temperatura_congelada": 2.260076556643749,
+ "2025": {
+  "temperatura_otima": 2.2610711942695616,
+  "brier_otimo": 0.0400254692740026,
+  "brier_com_temperatura_congelada": 0.04002534101607515,
+  "faixa_ate_5pct_acima_do_minimo": [
+   1.946038060436553,
+   2.6884515058398133
+  ]
+ },
+ "2024": {
+  "temperatura_otima": 2.367905479363072,
+  "brier_otimo": 0.04514112051316428,
+  "brier_com_temperatura_congelada": 0.04528484332445172,
+  "faixa_ate_5pct_acima_do_minimo": [
+   2.014600437334543,
+   2.848163153782748
+  ]
+ }
+}

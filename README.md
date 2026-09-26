@@ -87,7 +87,7 @@ Cada linha do arquivo de saída das chamadas guarda o corpo exato enviado, o SHA
 
 ## Artigo
 
-O texto do artigo está em `ARTIGO/` (LaTeX, pronto para o Overleaf; arquivo principal `main.tex`). As tabelas, a figura de correlações e o apêndice (perguntas e parâmetros congelados) são gerados a partir dos resultados salvos e das definições usadas nas chamadas aos modelos; nenhum número das tabelas é digitado à mão:
+O texto do artigo está em `ARTIGO/` (LaTeX, pronto para o Overleaf; arquivo principal `main.tex`). As tabelas, as figuras e o apêndice (perguntas e parâmetros congelados) são gerados a partir dos resultados salvos e das definições usadas nas chamadas aos modelos; nenhum número das tabelas é digitado à mão:
 ```
 python EXPERIMENTOS/scripts/gerar_tabelas.py
 python EXPERIMENTOS/scripts/figuras_artigo.py

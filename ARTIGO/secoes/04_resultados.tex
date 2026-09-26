@@ -36,6 +36,14 @@ A Tabela~\ref{tab:teste} mostra as métricas descritivas. O método principal te
 
 \input{tabelas/tab_teste}
 
+\paragraph{Sensibilidade à temperatura.} Depois do teste, examinamos quanto o desempenho da atratividade isolada depende da temperatura (Figura~\ref{fig:temperatura}); essa análise é diagnóstica e não alterou nenhum parâmetro congelado. O erro forma um vale bem definido: temperaturas baixas concentram a previsão na alternativa de maior escore, e temperaturas altas a aproximam da distribuição uniforme. O vale é largo: qualquer temperatura entre 1,95 e 2,69 mantém o Brier a menos de 5\% do mínimo em 2025, e entre 2,01 e 2,85 em 2024. A temperatura ótima de 2024 (2,37) ficou próxima da congelada (2,26), que teve Brier de 0,0453 no teste, contra 0,0451 com a ótima do próprio ano de teste. A calibração, portanto, transferiu-se de uma edição para a outra, e o resultado não depende de um ajuste fino da temperatura.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\linewidth]{curva_temperatura.pdf}
+\caption{Brier da atratividade isolada em função da temperatura $T$ da softmax (Equação~\ref{eq:softmax}), nas questões de 2025 e de 2024. Os pontos marcam o menor erro de cada ano; a linha pontilhada, a temperatura congelada, ajustada só com 2025. A curva de 2024 foi traçada depois do teste, apenas como diagnóstico.}\label{fig:temperatura}
+\end{figure}
+
 \subsection{Distratores e comparações entre pares}\label{sec:res-pares}
 
 Em 2024, a alternativa preferida pelo Jev nos pares formados só por distratores foi a mais escolhida pelos participantes em 69,8\% dos casos (718 pares) e em 80,3\% quando a diferença real passava de 10 pontos percentuais (239 pares). Nos pares que incluíam a alternativa correta, as proporções foram de 88,5\% e 94,6\%. A consistência entre as duas ordens foi de 95\%, e a alternativa apresentada primeiro foi escolhida em 48,5\% das vezes. Como referência, sem nenhum treino específico, esses valores estão no nível dos ranqueadores de pares de distratores treinados com escolhas de estudantes (67,5\% em \citealp{lee2025}; 65,8\%, e 74,3\% com diferença acima de 10 pontos, em \citealp{scarlatos2024}) e de especialistas humanos (71,7\% em \citealp{lee2025}), ainda que em outros domínios e populações.

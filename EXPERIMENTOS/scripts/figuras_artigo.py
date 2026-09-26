@@ -72,7 +72,63 @@ def correlacoes():
     plt.close(fig)
 
 
+def curva_temperatura():
+    """Brier da atratividade isolada (q1b) em função da temperatura, em 2025 e 2024.
+
+    Diagnóstico feito depois do teste: nada aqui é usado no ajuste. Os números citados no texto
+    são salvos em EXPERIMENTOS/resultados/sensibilidade_temperatura.json.
+    """
+    import numpy as np
+    sys.path.insert(0, str(Path(__file__).parent))
+    from analisar_rodada1 import PERGUNTAS, carregar, softmax
+
+    congelamento = json.loads((RAIZ / "EXPERIMENTOS/congelamento_teste_2024.json").read_text(encoding="utf-8"))
+    t_cong = 1 / congelamento["metodos"]["q1b"]["beta"]
+    ts = np.geomspace(0.3, 30, 400)
+    curvas, resumo = {}, {"temperatura_congelada": t_cong}
+    for ano in (2025, 2024):
+        _, X1, _, Y, _, _, _ = carregar(ano, f"EXPERIMENTOS/resultados/jev_rodada1_{ano}.jsonl")
+        s = X1[:, :, PERGUNTAS.index("q1b")]
+        brier = lambda T: float(((softmax(s / T) - Y) ** 2).sum(axis=1).mean())
+        curvas[ano] = np.array([brier(T) for T in ts])
+        i = int(curvas[ano].argmin())
+        faixa = ts[curvas[ano] <= curvas[ano][i] * 1.05]
+        resumo[str(ano)] = {"temperatura_otima": float(ts[i]), "brier_otimo": float(curvas[ano][i]),
+                            "brier_com_temperatura_congelada": brier(t_cong),
+                            "faixa_ate_5pct_acima_do_minimo": [float(faixa.min()), float(faixa.max())]}
+    (RAIZ / "EXPERIMENTOS/resultados/sensibilidade_temperatura.json").write_text(
+        json.dumps(resumo, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    virgula = lambda casas: matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:.{casas}f}".replace(".", ","))
+    plt.rcParams.update({"font.size": 8, "font.family": "DejaVu Sans"})
+    fig, ax = plt.subplots(figsize=(6.3, 3.4))
+    cores = {2025: "#2a5c8a", 2024: "#c0662b"}
+    rotulos = {2025: "2025 (desenvolvimento)", 2024: "2024 (teste)"}
+    for ano, estilo in ((2025, "-"), (2024, "--")):
+        ax.plot(ts, curvas[ano], estilo, color=cores[ano], lw=2, label=rotulos[ano])
+        i = int(curvas[ano].argmin())
+        ax.plot(ts[i], curvas[ano][i], "o", color=cores[ano], ms=6, mec="white", mew=1.5)
+    ax.axvline(t_cong, color=TINTA_2, lw=1, ls=":")
+    ax.text(t_cong * 1.06, 0.36, f"T congelada = {t_cong:.2f}".replace(".", ","), va="top", color=TINTA_2)
+    ax.set_xscale("log")
+    ax.set_xticks([0.3, 0.5, 1, 2, 5, 10, 20, 30])
+    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}".replace(".", ",")))
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax.yaxis.set_major_formatter(virgula(2))
+    ax.set_xlabel("Temperatura $T$ (escala logarítmica)", color=TINTA)
+    ax.set_ylabel("Brier A–E (menor é melhor)", color=TINTA)
+    ax.grid(alpha=0.25)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.legend(frameon=False, loc="center right")
+    fig.tight_layout()
+    fig.savefig(SAIDA / "curva_temperatura.pdf", bbox_inches="tight")
+    fig.savefig(SAIDA / "curva_temperatura.png", dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    return resumo
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     correlacoes()
+    print(json.dumps(curva_temperatura(), ensure_ascii=False, indent=1))
     print("Figuras geradas em", SAIDA)
