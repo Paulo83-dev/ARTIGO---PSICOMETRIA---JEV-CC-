@@ -39,6 +39,18 @@ def tex(s):
     return s.replace('"', "''")
 
 
+def num(v, casas):
+    """Número com vírgula decimal para modo matemático (sem o sinal de −0)."""
+    s = f"{v:.{casas}f}"
+    if float(s) == 0:
+        s = s.lstrip("-")
+    return s.replace(".", "{,}")
+
+
+# Coluna de parâmetros com quebra de linha, para a tabela não passar da margem
+COLUNAS = "@{}l>{\\raggedright\\arraybackslash}p{0.6\\linewidth}@{}"
+
+
 def descrever(pid, q):
     q = r1._substituir(q, "C")
     L = [f"\\paragraph{{{tex(NOMES[pid])}}} (\\texttt{{{pid}}}, tipo {q['type'].capitalize()})", ""]
@@ -86,24 +98,28 @@ def main():
           "Parâmetros ajustados em todas as questões de 2025 e aplicados sem alteração às de 2024 "
           "(arquivos \\texttt{congelamento\\_teste\\_2024.json} e \\texttt{congelamento\\_llm\\_2024.json} do repositório).", "",
           "\\begin{table}[ht]", "\\centering", "\\small", "\\caption{Parâmetros congelados do Jev e das linhas de base.}",
-          "\\begin{tabular}{ll}", "\\toprule", "Método & Parâmetros \\\\", "\\midrule",
-          f"Atratividade + pares (principal) & $\\beta_1 = {p['beta_padronizado'][0]:.5f}$, $\\beta_2 = {p['beta_padronizado'][1]:.5f}$ "
-          f"(padronizados); médias $({p['media'][0]:.5f};\\ {p['media'][1]:.5f})$, desvios $({p['dp'][0]:.5f};\\ {p['dp'][1]:.5f})$ \\\\",
-          f"Atratividade (proporção) & $\\beta = {m['q1b']['beta']:.5f}$ ($T = {m['q1b']['temperatura_equivalente']:.4f}$) \\\\",
-          f"Atratividade (convencimento) & $\\beta = {m['q1a (sensibilidade)']['beta']:.5f}$ "
-          f"($T = {m['q1a (sensibilidade)']['temperatura_equivalente']:.4f}$) \\\\",
-          f"Oracle & taxa média de acerto $= {m['oracle (usa gabarito)']['acerto_medio']:.5f}$ \\\\",
+          f"\\begin{{tabular}}{{{COLUNAS}}}", "\\toprule", "Método & Parâmetros \\\\", "\\midrule",
+          f"Atratividade + pares (principal) & $\\beta_1 = {num(p['beta_padronizado'][0], 5)}$, "
+          f"$\\beta_2 = {num(p['beta_padronizado'][1], 5)}$ (padronizados); "
+          f"médias $({num(p['media'][0], 5)};\\ {num(p['media'][1], 5)})$; "
+          f"desvios $({num(p['dp'][0], 5)};\\ {num(p['dp'][1], 5)})$ \\\\",
+          f"Atratividade (proporção) & $\\beta = {num(m['q1b']['beta'], 5)}$ "
+          f"($T = {num(m['q1b']['temperatura_equivalente'], 4)}$) \\\\",
+          f"Atratividade (convencimento) & $\\beta = {num(m['q1a (sensibilidade)']['beta'], 5)}$ "
+          f"($T = {num(m['q1a (sensibilidade)']['temperatura_equivalente'], 4)}$) \\\\",
+          f"Oracle & taxa média de acerto $= {num(m['oracle (usa gabarito)']['acerto_medio'], 5)}$ \\\\",
           "Média por área & proporção média de cada letra em 2025, por área \\\\",
           "Bradley-Terry & $\\lambda = 0{,}01$; soma das forças igual a zero \\\\",
           "\\bottomrule", "\\end{tabular}", "\\end{table}", ""]
     llm = json.loads((RAIZ / "EXPERIMENTOS/congelamento_llm_2024.json").read_text(encoding="utf-8"))["metodos_llm"]
     c = llm["LLM B q1b+pares"]
     L += ["\\begin{table}[ht]", "\\centering", "\\small", "\\caption{Parâmetros congelados do LLM.}",
-          "\\begin{tabular}{ll}", "\\toprule", "Método & Parâmetros \\\\", "\\midrule",
-          f"Método A (letras) & $T = {llm['LLM A (letras)']['temperatura']:.4f}$ \\\\",
-          f"Método B, atratividade & $\\beta = {llm['LLM B q1b']['beta']:.5f}$ \\\\",
-          f"Método B, pares & $\\beta = {llm['LLM B pares']['beta']:.5f}$ \\\\",
-          f"Método B, atratividade + pares & $\\beta_1 = {c['beta_padronizado'][0]:.5f}$, $\\beta_2 = {c['beta_padronizado'][1]:.5f}$ (padronizados) \\\\",
+          f"\\begin{{tabular}}{{{COLUNAS}}}", "\\toprule", "Método & Parâmetros \\\\", "\\midrule",
+          f"Método A (letras) & $T = {num(llm['LLM A (letras)']['temperatura'], 4)}$ \\\\",
+          f"Método B, atratividade & $\\beta = {num(llm['LLM B q1b']['beta'], 5)}$ \\\\",
+          f"Método B, pares & $\\beta = {num(llm['LLM B pares']['beta'], 5)}$ \\\\",
+          f"Método B, atratividade + pares & $\\beta_1 = {num(c['beta_padronizado'][0], 5)}$, "
+          f"$\\beta_2 = {num(c['beta_padronizado'][1], 5)}$ (padronizados) \\\\",
           "\\bottomrule", "\\end{tabular}", "\\end{table}", ""]
 
     L += ["\\section{Instruções do LLM}\\label{ap:llm}", "",
