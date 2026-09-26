@@ -200,11 +200,40 @@ def tab_llm_metricas():
         "tab:llm-metricas", "lccccc", cab, corpo, extra="\\setlength{\\tabcolsep}{4pt}\n"))
 
 
+def tab_acerto():
+    res = ler("analise_erros.json")["acerto_por_metodo_2024"]
+    linhas = [(r, {**d, "fracao": 100 * d["fracao_do_brier_no_gabarito"]}) for r, d in rotulos_teste(res)]
+    cols = [("mae_acerto", "MAE do acerto", "menor", 3), ("pearson_acerto", "Pearson", "maior", 3),
+            ("spearman_acerto", "Spearman", "maior", 3), ("spearman_com_b_tri", r"Spearman com $b$", None, 3),
+            ("fracao", r"\% do Brier no gabarito", None, 0)]
+    cab, corpo = tabela_metricas(linhas, cols)
+    grava("tab_acerto.tex", ambiente(
+        "Teste em 2024: taxa de acerto prevista (probabilidade dada à alternativa correta) comparada com a taxa real "
+        "de acerto e com o parâmetro $b$ da TRI (análise descritiva). A última coluna é a parte do Brier que vem da "
+        "alternativa correta.", "tab:acerto", "lccccc", cab, corpo, extra="\\setlength{\\tabcolsep}{4pt}\n"))
+
+
+def tab_faixas():
+    anos = ler("analise_erros.json")["por_ano"]
+    pct = lambda v: num(100 * v, 1)[:-1] + r"\%$"
+    corpo = []
+    for f25, f24 in zip(anos["2025"]["faixas_de_acerto"], anos["2024"]["faixas_de_acerto"]):
+        rot = f25["faixa"].replace("%", r"\%")
+        corpo.append(f"{rot} ({f25['n_questoes']} / {f24['n_questoes']}) & {pct(f25['acerto_previsto_medio'])} & "
+                     f"{pct(f25['acerto_real_medio'])} & {pct(f24['acerto_previsto_medio'])} & {pct(f24['acerto_real_medio'])} \\\\")
+    grava("tab_faixas.tex", ambiente(
+        "Taxa de acerto prevista pelo método principal e taxa real, por faixa de acerto real (análise descritiva). "
+        "Entre parênteses, o número de questões em 2025 e em 2024; em 2025, previsões fora da dobra.",
+        "tab:faixas", "lcccc",
+        r"Acerto real & 2025: previsto & 2025: real & 2024: previsto & 2024: real \\", corpo))
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     SAIDA.mkdir(parents=True, exist_ok=True)
     print("Tabelas geradas em", SAIDA)
-    for f in (tab_itens, tab_desenvolvimento, tab_hipoteses, tab_teste, tab_areas, tab_llm, tab_llm_metricas):
+    for f in (tab_itens, tab_desenvolvimento, tab_hipoteses, tab_teste, tab_areas, tab_acerto, tab_faixas,
+              tab_llm, tab_llm_metricas):
         f()
 
 

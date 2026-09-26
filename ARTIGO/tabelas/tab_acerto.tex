@@ -1,0 +1,21 @@
+% GERADO AUTOMATICAMENTE por EXPERIMENTOS/scripts/gerar_tabelas.py; não editar à mão.
+\begin{table}[ht]
+\centering
+\caption{Teste em 2024: taxa de acerto prevista (probabilidade dada à alternativa correta) comparada com a taxa real de acerto e com o parâmetro $b$ da TRI (análise descritiva). A última coluna é a parte do Brier que vem da alternativa correta.}\label{tab:acerto}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{lccccc}
+\toprule
+Método & \makecell{MAE\\do acerto \menor} & \makecell{Pearson\\\maior} & \makecell{Spearman\\\maior} & Spearman com $b$ & \% do Brier no gabarito \\
+\midrule
+Atratividade + pares (principal) & $\mathbf{0{,}119}$ & $\mathbf{0{,}454}$ & $\mathbf{0{,}449}$ & $-0{,}485$ & $54$ \\
+Atratividade (proporção) & $0{,}124$ & $0{,}390$ & $0{,}387$ & $-0{,}429$ & $55$ \\
+Atratividade (convencimento) & $0{,}126$ & $0{,}387$ & $0{,}395$ & $-0{,}435$ & $54$ \\
+Oracle (usa o gabarito) & $0{,}135$ & --- & --- & --- & $53$ \\
+Média por área de 2025 & $0{,}207$ & $0{,}069$ & $0{,}004$ & $0{,}024$ & $67$ \\
+Uniforme & $0{,}209$ & --- & --- & --- & $66$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

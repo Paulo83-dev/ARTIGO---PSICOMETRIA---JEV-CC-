@@ -54,9 +54,23 @@ A Tabela~\ref{tab:areas} mostra o Brier por área (análise descritiva; CN e MT 
 
 \input{tabelas/tab_areas}
 
+\subsection{Onde o método erra}\label{sec:res-erros}
+
+As análises desta seção foram feitas depois do teste, sobre as previsões já salvas, e são descritivas; nenhum parâmetro foi ajustado. Elas separam as duas partes da distribuição prevista: a probabilidade dada à alternativa correta, que é a \emph{taxa de acerto prevista}, e a divisão do restante entre os distratores.
+
+\paragraph{Taxa de acerto.} Em 2024, a taxa de acerto prevista pelo método principal errou a real, em média, por 0,119, contra 0,135 da Oracle, que atribui a todas as questões a mesma taxa (Tabela~\ref{tab:acerto}). A correlação com a taxa real foi de 0,454 (Pearson) e, com o parâmetro de dificuldade $b$ da TRI, de $-0{,}485$ (Spearman): o método distingue, de forma moderada, as questões mais fáceis das mais difíceis, sem ter sido treinado para isso. Como referência, \citet{marinho2023} obtiveram correlação de 0,56 para o parâmetro de dificuldade com modelos treinados em questões do ENEM. A taxa de acerto concentra a maior parte do erro: 54\% do Brier do método principal vem da alternativa correta. Uma linha de base hipotética que conhecesse o gabarito e a taxa real de acerto de cada questão, dividindo o restante igualmente entre os distratores, teria Brier de 0,0173, contra 0,0420 do método principal.
+
+\input{tabelas/tab_acerto}
+
+\paragraph{Achatamento nos extremos.} A taxa de acerto real foi de 8,7\% a 83,2\% em 2024, mas a prevista ficou entre 17,1\% e 51,5\%. O método acerta a direção, mas não chega aos extremos (Tabela~\ref{tab:faixas}): em 2024, nas questões difíceis, com até 25\% de acerto, previu em média 31,5\% contra 18,5\% reais, e nas fáceis, com mais de 55\%, previu 45,3\% contra 66,7\%, com o mesmo padrão em 2025. As dez questões com maior erro em 2024 são desses dois tipos: questões fáceis de Linguagens e Ciências Humanas, com mais de 65\% de acerto, e questões em que um distrator foi mais escolhido que a alternativa correta e menos de 25\% acertaram. Nas dez com menor erro, a taxa de acerto real foi, em média, de 39,7\%, próxima da média do exame.
+
+\input{tabelas/tab_faixas}
+
+\paragraph{Divisão entre os distratores.} Retirada a alternativa correta e renormalizadas as proporções dos quatro distratores, a divisão prevista teve Brier de 0,0346 em 2024, contra 0,0437 de uma divisão igual entre eles (0,0404 contra 0,0494 em 2025). Nas questões em que um distrator foi mais escolhido que a alternativa correta, a vantagem se manteve em 2024 (0,0395 contra 0,0514, em 32 questões), mas praticamente desapareceu em 2025 (0,0519 contra 0,0531, em 28 questões).
+
 \subsection{Comparação com o LLM}\label{sec:res-llm}
 
-A comparação com o LLM generativo foi acrescentada depois do teste principal e segue o mesmo protocolo de congelamento; seus resultados são descritivos. A Tabela~\ref{tab:llm} mostra as quatro comparações pré-especificadas. O uso padrão do LLM, pelas probabilidades das letras (método A), teve erro claramente maior que o do Jev (C1) e não superou a Oracle (C4), como em \citet{saeuberli2025}. Quando recebeu as mesmas perguntas de atratividade e de pares (método B), o LLM ficou próximo do Jev: a diferença em favor do Jev não foi estatisticamente distinguível de zero, nem na combinação (C2) nem na atratividade isolada (C3), embora nesta o intervalo quase exclua o zero.
+A comparação com o LLM generativo foi acrescentada depois do teste principal e segue o mesmo protocolo de congelamento; seus resultados são descritivos. A Tabela~\ref{tab:llm} mostra as quatro comparações pré-especificadas. O uso padrão do LLM, pelas probabilidades das letras (método A), teve erro claramente maior que o do Jev (C1) e não superou a Oracle (C4), como em \citet{saeuberli2025}. Quando recebeu as mesmas perguntas de atratividade e de pares (método B), o LLM ficou próximo do Jev: a diferença em favor do Jev não foi estatisticamente distinguível de zero, nem na combinação (C2) nem na atratividade isolada (C3), embora nesta o intervalo quase exclua o zero. A diferença entre os dois usos aparece com clareza na taxa de acerto prevista: pelo método A, a correlação com a taxa real foi de 0,083, praticamente nula, porque o LLM atribui ao gabarito quase a mesma probabilidade em todas as questões; pelo método B, com os pares, foi de 0,439, próxima à do Jev.
 
 \input{tabelas/tab_llm}
 
