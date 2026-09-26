@@ -10,7 +10,7 @@ As previsões do Jev são comparadas com as proporções reais de escolha calcul
 exportacao_acervo/
   acervo_questoes_aprovadas_enem_2024_2025.json   acervo de questões (entrada do experimento)
 VIZUALIZAÇÂO HTML/
-  REVISAO_INTEGRAL_ACERVO_2024.html                revisão da curadoria, questão a questão
+  REVISAO_INTEGRAL_ACERVO_2024.html                revisão da curadoria, questão a questão, com o gráfico real × previsto
   REVISAO_INTEGRAL_ACERVO_2025.html
 EXPERIMENTOS/
   rodada1_especificacao.md                         perguntas feitas ao Jev e desenho da rodada
@@ -92,4 +92,11 @@ O texto do artigo está em `ARTIGO/` (LaTeX, pronto para o Overleaf; arquivo pri
 python EXPERIMENTOS/scripts/gerar_tabelas.py
 python EXPERIMENTOS/scripts/figuras_artigo.py
 python EXPERIMENTOS/scripts/gerar_apendice.py
+```
+
+## Páginas de revisão
+
+Cada questão elegível das páginas em `VIZUALIZAÇÂO HTML/` traz um gráfico com a proporção real de escolha de cada alternativa e a previsão do método principal (em 2025, previsão fora da dobra; em 2024, previsão do teste com os parâmetros congelados). Os gráficos são gerados a partir dos resultados salvos:
+```
+python EXPERIMENTOS/scripts/graficos_html.py
 ```
